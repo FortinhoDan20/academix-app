@@ -121,6 +121,16 @@ export const getAllYears = () =>
   API.get("/api/year/all");
 
 /* ================================================= */
+/* FEES */
+/* ================================================= */
+
+export const addNewFees = (data) =>
+  API.post("/api/fees/add", data);
+
+export const getAllFees = () =>
+  API.get("/api/fees/all");
+
+/* ================================================= */
 /* USER */
 /* ================================================= */
 
@@ -132,5 +142,18 @@ export const getAllUsers = () =>
 
 export const getSchoolUsers = () =>
   API.get("/api/user/school-users");
+
+export const getUser = (id) =>
+  API.get(`/api/user/${id}`);
+
+/* ================================================= */
+/* STUDENT */
+/* ================================================= */
+
+export const addStudent = (data) => API.post("/api/student/add", data);
+
+export const getAllStudets = () => API.get("/api/student/all");
+
+export const getStudents = (id) => API.get(`/api/student/${id}`);
 
 export default API;

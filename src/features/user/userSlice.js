@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../api";
+import { id } from "date-fns/locale/id";
 
 
 export const createUser = createAsyncThunk(
   "user/create",
 
   async (
-    { formValue, navigate, toast },
+    { finalData, navigate, toast },
     { rejectWithValue }
   ) => {
 
@@ -15,12 +16,14 @@ export const createUser = createAsyncThunk(
 
       /* ================= API REQUEST ================= */
 
-      const response = await api.addUser(formValue);
+      const response = await api.addUser(finalData);
+
 
       /* ================= SUCCESS TOAST ================= */
 
       toast.success(
-        response.message 
+
+        response.data.message 
       );
 
       /* ================= REDIRECT ================= */
@@ -104,6 +107,37 @@ export const schoolAllUsers = createAsyncThunk(
   }
 );
 
+export const detailsUser = createAsyncThunk(
+  "user/details-infos",
+
+  async (id, { rejectWithValue } ) => {
+
+    try {
+
+
+      /* ================= API REQUEST ================= */
+      
+      const response = await api.getUser(id); 
+
+      return response.data;
+
+    } catch (error) {
+
+      console.log("FULL ERROR:", error);
+
+      const message =
+        error.response?.message ||
+        error.message ||
+        "Erreur serveur";
+
+      toast.error(message);
+
+      return rejectWithValue(message);
+    }
+  }
+);
+
+
 
 const userSlice = createSlice({
 
@@ -176,6 +210,24 @@ const userSlice = createSlice({
       .addCase(schoolAllUsers.rejected, (state, action) => {
 
         state.loading = false;
+        state.error = action.payload || "Erreur de connexion";
+      })
+      .addCase(detailsUser.pending, (state) => {
+
+        state.loading = true;
+
+        state.error = null;
+      })
+      .addCase(detailsUser.fulfilled, (state, action) => {
+
+        state.loading = false;
+        state.user = action.payload.data;
+        state.error = null;
+      })
+      .addCase(detailsUser.rejected, (state, action) => {
+
+        state.loading = false;
+
         state.error = action.payload || "Erreur de connexion";
       })
   },

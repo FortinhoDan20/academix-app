@@ -70,6 +70,7 @@ import StatistiqueEntreprise from "./pages/rapport/StatistiqueEntreprise";
 import ProtectedRoute from "./pages/protected/ProtectedRoute";
 import { setUser } from "./features/auth/authSlice";
 import Profile from "./pages/student/profile";
+import Students from "./pages/student/Students";
 
 function App() {
   const location = useLocation();
@@ -132,7 +133,7 @@ useEffect(() => {
           {/* USERS */}
           <Route path="users" element={<Utilisateur />} />
           <Route path="add-new-user" element={<AddUser />} />
-          <Route path="details-user" element={<DetailsInfos />} />
+          <Route path="/users/view/:id" element={<DetailsInfos />} />
           <Route path="edit-user" element={<EditUser />} />
 
           {/* SCHOOL */}
@@ -171,7 +172,8 @@ useEffect(() => {
           <Route path="list-inscrit" element={<ListInscrit />} />
           <Route path="details-student" element={<StudentDetails />} />
           <Route path="profile-student" element={<Profile />} />
-          <Route path="student-dossier" element={<StudentDossier />} />
+          <Route path="/student-dossier/:id" element={<StudentDossier />} />
+          <Route path="/students" element={<Students />} />
 
           {/* RAPPORT */}
           <Route path="rapport-global" element={<RapportGlobal />} />
@@ -181,6 +183,8 @@ useEffect(() => {
           {/* STATISTIQUES */}
           <Route path="statistique-global" element={<StatistiqueGlobal />} />
           <Route path="statistique-academix" element={<StatistiqueEntreprise />} />
+
+          
 
         </Route>
 

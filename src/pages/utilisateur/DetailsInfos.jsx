@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ArrowLeft,
   User2,
@@ -12,25 +12,37 @@ import {
   CircleUserRound,
   Pencil,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { motion } from "framer-motion";
+import { detailsUser } from "../../features/user/userSlice";
 
 const DetailsInfos = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const { id } = useParams();
 
-  // 👉 DONNÉES SIMULÉES
-  const user = {
-    fullName: "Jean Mukendi",
-    username: "jean.mukendi",
-    email: "jean@gmail.com",
-    phone: "+243 999 000 111",
-    role: "Administrateur",
-    sexe: "Masculin",
-    school: "Complexe Scolaire Les Élites",
-    city: "Kinshasa",
-    status: "Actif",
-    createdAt: "15 Mai 2026",
-  };
+  const { user, loading } = useSelector((state) => state.user);
+
+  console.log("users details:", user)
+
+  useEffect(() => {
+    dispatch(detailsUser(id));
+  }, [dispatch]);
+
+
+    if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="w-14 h-14 border-4 border-sky-200 border-t-sky-900 rounded-full"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -81,14 +93,14 @@ const DetailsInfos = () => {
                 text-3xl
                 font-bold
               ">
-                {user.fullName}
+               {user?.name}
               </h1>
 
               <p className="
                 text-blue-100
                 mt-1
               ">
-                @{user.username}
+               @{user?.nomUtilisateur}
               </p>
 
               <div className="
@@ -107,7 +119,7 @@ const DetailsInfos = () => {
                   border
                   border-white/20
                 ">
-                  {user.role}
+                 {user?.role}
                 </span>
 
                 <span className="
@@ -119,7 +131,7 @@ const DetailsInfos = () => {
                   border
                   border-green-300/20
                 ">
-                  {user.status}
+                  {user?.isActive ? "Actif" : "Bloqué"}
                 </span>
 
               </div>
@@ -174,6 +186,33 @@ const DetailsInfos = () => {
             >
               <Pencil size={18} />
               Modifier
+            </button>
+
+              <button
+             onClick={() => navigate("/edit-user")}
+              className={`
+                px-5
+                py-3
+                rounded-2xl
+                ${
+
+                  user?.isActive
+                   ? "bg-red-100 text-red-700 hover:bg-red-200"
+                   : "bg-green-100 text-green-700 hover:bg-green-200"
+                }
+                
+                text-sky-800
+                hover:bg-gray-100
+                font-medium
+                flex
+                items-center
+                gap-2
+                transition
+              `}
+            >
+              <User2 size={18} />
+               {user?.isActive ?  "Bloquer utilisateur": "Activer utilisateur"}
+    
             </button>
 
           </div>
@@ -266,7 +305,7 @@ const DetailsInfos = () => {
                   text-gray-800
                   dark:text-white
                 ">
-                  {user.fullName}
+                  {user?.name}
                 </h3>
 
               </div>
@@ -285,7 +324,7 @@ const DetailsInfos = () => {
                   text-gray-800
                   dark:text-white
                 ">
-                  {user.sexe}
+                  {user?.sexe}
                 </h3>
 
               </div>
@@ -304,7 +343,7 @@ const DetailsInfos = () => {
                   text-gray-800
                   dark:text-white
                 ">
-                  {user.phone}
+                  {user?.phone}
                 </h3>
 
               </div>
@@ -323,7 +362,7 @@ const DetailsInfos = () => {
                   text-gray-800
                   dark:text-white
                 ">
-                  {user.city}
+                 {user?.ville}
                 </h3>
 
               </div>
@@ -426,7 +465,7 @@ const DetailsInfos = () => {
                   text-gray-800
                   dark:text-white
                 ">
-                  {user.email}
+                  {user?.email}
                 </h3>
 
               </div>
@@ -457,7 +496,7 @@ const DetailsInfos = () => {
                   text-gray-800
                   dark:text-white
                 ">
-                  @{user.username}
+                @{user?.nomUtilisateur}
                 </h3>
 
               </div>
@@ -488,7 +527,7 @@ const DetailsInfos = () => {
                   text-gray-800
                   dark:text-white
                 ">
-                  {user.role}
+                  {user?.role}
                 </h3>
 
               </div>
@@ -523,7 +562,7 @@ const DetailsInfos = () => {
                   text-sm
                   font-semibold
                 ">
-                  {user.status}
+                  {user?.isActive ?  "Compte Actif": "Compte bloqué"}
                 </span>
 
               </div>
@@ -618,12 +657,12 @@ const DetailsInfos = () => {
                   text-gray-800
                   dark:text-white
                 ">
-                  {user.school}
+                  {user?.school?.name}
                 </h3>
 
               </div>
 
-              {/* DATE */}
+              {/* ADRESSE */}
               <div className="
                 bg-gray-50
                 dark:bg-gray-700/40
@@ -640,7 +679,7 @@ const DetailsInfos = () => {
                 ">
                   <CalendarDays size={16} />
                   <span className="text-sm">
-                    Créé le
+                    Adresse de l'école
                   </span>
                 </div>
 
@@ -649,7 +688,7 @@ const DetailsInfos = () => {
                   text-gray-800
                   dark:text-white
                 ">
-                  {user.createdAt}
+                 {user?.school?.address}
                 </h3>
 
               </div>

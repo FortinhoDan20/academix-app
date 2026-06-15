@@ -21,6 +21,8 @@ import { getAllSection } from "../../features/section/sectionSlice";
 import { getAllYears } from "../../features/year/yearSlice";
 import { getAllOptions } from "../../features/option/optionSlice";
 import { getAllClassrooms } from "../../features/classroom/classroomSlice";
+import { addNewStudent } from "../../features/student/studentSlice";
+import { toast } from "react-toastify";
 
 /* ================= COMPONENT ================= */
 
@@ -52,6 +54,7 @@ export default function NewStudent() {
   const {
     register,
     handleSubmit,
+    reset,
     watch,
   } = useForm({
     defaultValues: {
@@ -185,7 +188,14 @@ export default function NewStudent() {
   */
 
   const onSubmit = (data) => {
-    console.log(data);
+    const finalData = {
+    ...data,
+    sectionId: data.sectionId || null,
+    optionId: data.optionId || null,
+  };
+    dispatch(dispatch(addNewStudent({ finalData, navigate, toast })))
+    
+    reset();
   };
 
   /*
@@ -378,67 +388,137 @@ export default function NewStudent() {
           className="p-6 md:p-8 space-y-8"
         >
 
-          {/* ================= STEP 1 ================= */}
+         {/* ================= STEP 1 ================= */}
 
           {step === 1 && (
-
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="space-y-6"
+              className="space-y-8"
             >
+              <SectionTitle title="Informations de l'élève" icon={User} />
 
-              <SectionTitle
-                title="Informations de l'élève"
-                icon={User}
-              />
+              <div className="grid md:grid-cols-3 gap-5">
 
-              <div className="grid md:grid-cols-2 gap-5">
-
+                {/* NOM */}
                 <Field label="Nom">
-
                   <Input
                     icon={User}
-                    register={register("firstName")}
-                    placeholder="Entrer le nom"
+                    register={register("nom")}
+                    placeholder="Ex: TSHIBOLA"
                   />
-
                 </Field>
 
+                {/* POSTNOM */}
                 <Field label="Postnom">
-
                   <Input
                     icon={User}
-                    register={register("lastName")}
-                    placeholder="Entrer le postnom"
+                    register={register("postnom")}
+                    placeholder="Ex: MUTOMBO"
                   />
-
                 </Field>
 
-                <Field label="Date de naissance">
+                {/* PRENOM */}
+                <Field label="Prénom">
+                  <Input
+                    icon={User}
+                    register={register("prenom")}
+                    placeholder="Ex: Jean"
+                  />
+                </Field>
 
+                {/* DATE DE NAISSANCE */}
+                <Field label="Date de naissance">
                   <Input
                     type="date"
                     icon={Calendar}
-                    register={register("birthDate")}
+                    register={register("dateNaissance")}
                   />
-
                 </Field>
 
-                <Field label="Téléphone">
-
+                {/* NATIONALITE */}
+                <Field label="Nationalité">
                   <Input
-                    icon={Phone}
-                    register={register("phone")}
-                    placeholder="+243..."
+                    icon={Users}
+                    register={register("nationalite")}
+                    placeholder="Congolaise"
                   />
-
                 </Field>
 
+                {/* ADRESSE */}
+                <Field label="Adresse">
+                  <Input
+                    icon={School}
+                    register={register("adresse")}
+                    placeholder="Quartier, avenue..."
+                  />
+                </Field>
               </div>
 
-            </motion.div>
+            {/* ================= SEXE COMPACT UX ================= */}
+          <div className="space-y-2">
 
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Sexe
+            </label>
+
+            <div className="flex gap-3">
+
+              {/* GARÇON */}
+              <label className="cursor-pointer">
+                <input
+                  type="radio"
+                  value="M"
+                  {...register("sexe")}
+                  className="hidden peer"
+                />
+
+                <div className="
+                  flex items-center gap-2
+                  px-57 py-5 rounded-xl border
+                  bg-white dark:bg-gray-800
+                  text-sm
+                  transition
+                  hover:border-sky-500
+                  peer-checked:bg-sky-900
+                  peer-checked:text-white
+                  peer-checked:border-sky-900
+                ">
+                  <User size={26} />
+                  <span>Garçon</span>
+                </div>
+              </label>
+
+              {/* FILLE */}
+              <label className="cursor-pointer">
+                <input
+                  type="radio"
+                  value="F"
+                  {...register("sexe")}
+                  className="hidden peer"
+                />
+
+                <div className="
+                  flex items-center gap-2
+                  px-60 py-5 rounded-xl border
+                  bg-white dark:bg-gray-800
+                  text-sm
+                  transition
+                  hover:border-pink-500
+                  peer-checked:bg-pink-600
+                  peer-checked:text-white
+                  peer-checked:border-pink-600
+                ">
+                  <User size={26} />
+                  <span>Fille</span>
+                </div>
+              </label>
+
+            </div>
+
+          </div>
+
+            </motion.div>
           )}
 
           {/* ================= STEP 2 ================= */}
@@ -462,8 +542,8 @@ export default function NewStudent() {
 
                   <Input
                     icon={User}
-                    register={register("fatherName")}
-                    placeholder="Nom du père"
+                    register={register("nomPere")}
+                    placeholder="Nom complet du père"
                   />
 
                 </Field>
@@ -472,7 +552,7 @@ export default function NewStudent() {
 
                   <Input
                     icon={Phone}
-                    register={register("fatherPhone")}
+                    register={register("telephonePere")}
                     placeholder="+243..."
                   />
 
@@ -482,8 +562,8 @@ export default function NewStudent() {
 
                   <Input
                     icon={User}
-                    register={register("motherName")}
-                    placeholder="Nom de la mère"
+                    register={register("nomMere")}
+                    placeholder="Nom complet de la mère"
                   />
 
                 </Field>
@@ -492,7 +572,7 @@ export default function NewStudent() {
 
                   <Input
                     icon={Phone}
-                    register={register("motherPhone")}
+                    register={register("telephoneMere")}
                     placeholder="+243..."
                   />
 
@@ -593,29 +673,28 @@ export default function NewStudent() {
 
               <div className="grid md:grid-cols-2 gap-5">
 
-                <Field label="Année scolaire">
+               <Field label="Année scolaire">
+                  <Select {...register("yearId")}   
+                    className="
+                      w-full
+                      p-2
+                      border
+                      rounded-md
+                      bg-white
+                      text-gray-900
+                      dark:bg-gray-800
+                      dark:text-white
+                    ">
+                    <option value="">Choisir une année</option>
 
-                  <Select register={register("yearId")}>
-
-                    <option value="">
-                      Choisir une année
-                    </option>
-
-                    {allYears?.map((year) => (
-
-                      <option
-                        key={year._id}
-                        value={year._id}
-                      >
-                        {year.name}
+                    {allYears?.map((y) => (
+                      <option key={y._id} value={y._id} >
+                        {y.year}
                       </option>
-
                     ))}
-
                   </Select>
-
                 </Field>
-
+     
                 <Field label="Classe">
 
                   <Select register={register("classroomId")}>
@@ -629,6 +708,7 @@ export default function NewStudent() {
                       <option
                         key={classroom._id}
                         value={classroom._id}
+                        
                       >
                         {classroom.name}
                       </option>

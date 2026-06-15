@@ -55,6 +55,17 @@ const Utilisateur = () => {
     secretaire: "bg-yellow-100 text-yellow-700",
   };
 
+const handleToggleStatus = async (id) => {
+  try {
+    await dispatch(toggleUserStatus(id)).unwrap();
+
+    toast.success("Statut mis à jour");
+  } catch (error) {
+    toast.error(error || "Erreur");
+  }
+};
+
+
   useEffect(() => {
     dispatch(schoolAllUsers());
   }, [dispatch]);
@@ -269,16 +280,16 @@ const Utilisateur = () => {
                         <div className="flex items-center gap-3">
                           <div
                             className="
-            w-10
-            h-10
-            rounded-full
-            bg-blue-600
-            text-white
-            flex
-            items-center
-            justify-center
-            font-bold
-          "
+                                  w-10
+                                  h-10
+                                  rounded-full
+                                  bg-blue-600
+                                  text-white
+                                  flex
+                                  items-center
+                                  justify-center
+                                  font-bold
+                                "
                           >
                             {u.name?.charAt(0)}
                           </div>
@@ -296,9 +307,9 @@ const Utilisateur = () => {
                       <td className="p-4">
                         <span
                           className={`
-          px-3 py-1 rounded-full text-xs font-semibold
-          ${roleColors[u.role]}
-        `}
+                            px-3 py-1 rounded-full text-xs font-semibold
+                            ${roleColors[u.role]}
+                          `}
                         >
                           {u.role}
                         </span>
@@ -307,13 +318,13 @@ const Utilisateur = () => {
                       <td className="p-4">
                         <span
                           className={`
-          px-3 py-1 rounded-full text-xs font-semibold
-          ${
-            u.isActive
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }
-        `}
+                          px-3 py-1 rounded-full text-xs font-semibold
+                          ${
+                            u.isActive
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-700"
+                          }
+                        `}
                         >
                           {u.isActive ? "Actif" : "Bloqué"}
                         </span>
@@ -325,21 +336,65 @@ const Utilisateur = () => {
                           : "-"}
                       </td>
 
-                      <td className="p-4">
-                        <div className="flex justify-center gap-2">
-                          <button className="p-2 rounded-lg bg-green-100 hover:bg-green-200">
-                            <Eye size={18} />
-                          </button>
+                          <td className="p-4">
+                            <div className="flex justify-center gap-2">
 
-                          <button className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200">
-                            <Pencil size={18} />
-                          </button>
+                              {/* Voir */}
+                              <button
+                                onClick={() => navigate(`/users/view/${u._id}`)}
+                                className="
+                                  p-2
+                                  rounded-lg
+                                  bg-emerald-100
+                                  text-emerald-700
+                                  hover:bg-emerald-200
+                                  transition
+                                "
+                                title="Voir utilisateur"
+                              >
+                                <Eye size={18} />
+                              </button>
 
-                          <button className="p-2 rounded-lg bg-red-100 hover:bg-red-200">
-                            <UserX size={18} />
-                          </button>
-                        </div>
-                      </td>
+                              {/* Modifier */}
+                              <button
+                                onClick={() => navigate(`/users/edit/${u._id}`)}
+                                className="
+                                  p-2
+                                  rounded-lg
+                                  bg-blue-100
+                                  text-blue-700
+                                  hover:bg-blue-200
+                                  transition
+                                "
+                                title="Modifier utilisateur"
+                              >
+                                <Pencil size={18} />
+                              </button>
+
+                              {/* Activer / Désactiver */}
+                              <button
+                                onClick={() => handleToggleStatus(u._id)}
+                                className={`
+                                  p-2
+                                  rounded-lg
+                                  transition
+                                  ${
+                                    u.isActive
+                                      ? "bg-red-100 text-red-700 hover:bg-red-200"
+                                      : "bg-green-100 text-green-700 hover:bg-green-200"
+                                  }
+                                `}
+                                title={
+                                  u.isActive
+                                    ? "Bloquer utilisateur"
+                                    : "Activer utilisateur"
+                                }
+                              >
+                                <UserX size={18} />
+                              </button>
+
+                            </div>
+                          </td>
                     </tr>
                   ))}
                 </>

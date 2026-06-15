@@ -12,7 +12,10 @@ import {
   Venus,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { createUser } from "../../features/user/userSlice";
+import { toast } from "react-toastify";
+
 
 const ALL_ROLES = [
   {
@@ -43,6 +46,7 @@ const ALL_ROLES = [
 
 const AddUser = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const { user } = useSelector((state) => state.auth);
 
@@ -74,6 +78,13 @@ const AddUser = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
+
+    const finalData = {
+    ...data,
+    };
+
+    
+    dispatch(createUser({ finalData, navigate, toast}))
 
     reset();
   };

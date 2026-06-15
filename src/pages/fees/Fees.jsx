@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllFees } from "../../features/fees/feesSlice";
 
 const sortFieldOptions = [
-  { value: "createdAt", label: "Date de création" },
+  { value: "year", label: "Année Scolaire" },
   { value: "amount", label: "Montant" },
   { value: "cycle", label: "Cycle" },
 ];

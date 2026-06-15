@@ -2,12 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../api";
 
 
-export const addNewSection = createAsyncThunk("section/add",  async ({finalData, formValue, navigate, toast }, { rejectWithValue }) => {
+export const addNewStudent = createAsyncThunk("student/add",  async ({finalData, formValue, navigate, toast }, { rejectWithValue }) => {
     
         try {
           
         
-          const response = await api.addSection(finalData);    
+          const response = await api.addStudent(finalData);    
     
           toast.success(
             response.data.message
@@ -33,10 +33,10 @@ export const addNewSection = createAsyncThunk("section/add",  async ({finalData,
       
 })
 
-export const getAllSection = createAsyncThunk("section/all", async(_, { rejectWithValue }) => {
+export const getAllStudents = createAsyncThunk("student/all", async(_, { rejectWithValue }) => {
   
         try {
-            const response = await api.getAllSection()
+            const response = await api.getAllStudets()
             return response.data
   
         } catch (error) {
@@ -53,12 +53,9 @@ export const getAllSection = createAsyncThunk("section/all", async(_, { rejectWi
   
 })
 
-  export const detailsSection = createAsyncThunk(
-    "cycle/details",
-    async (id, { rejectWithValue }) => {
+  export const detailsStudent = createAsyncThunk("student/details", async (id, { rejectWithValue }) => {
       try {
-        const response = await api.updateTeacher(id, formValue);
-        navigate(`/teacher`)
+        const response = await api.getStudents(id, formValue);
         return response.data;
       } catch (err) {
         return rejectWithValue(err.response.data);
@@ -67,15 +64,15 @@ export const getAllSection = createAsyncThunk("section/all", async(_, { rejectWi
   )
 
 
-  const sectionSlice = createSlice({
+  const studentSlice = createSlice({
 
-    name: "section",
+    name: "student",
 
     initialState: {
 
-      section: {},
+      student: {},
 
-      sections: [],
+      students: [],
 
       loading: false,
 
@@ -84,47 +81,47 @@ export const getAllSection = createAsyncThunk("section/all", async(_, { rejectWi
      extraReducers: (builder) => {
     
         builder  
-          .addCase(addNewSection.pending, (state) => {    
+          .addCase(addNewStudent.pending, (state) => {    
             state.loading = true;    
             state.error = null;
           })
       
-          .addCase(addNewSection.fulfilled, (state, action) => {    
+          .addCase(addNewStudent.fulfilled, (state, action) => {    
             state.loading = false;     
-            state.section = action.payload;         
+            state.student = action.payload?.data?.student;         
             state.error = null;
           })        
-          .addCase(addNewSection.rejected, (state, action) => {    
+          .addCase(addNewStudent.rejected, (state, action) => {    
             state.loading = false;    
-            state.error = action.payload || "Erreur de connexion";
+            state.error = action.payload || "Erreur d'enregistrement";
           })
 
-          .addCase(getAllSection.pending, (state) => {    
+          .addCase(getAllStudents.pending, (state) => {    
             state.loading = true;   
             state.error = null;
           })
       
-          .addCase(getAllSection.fulfilled, (state, action) => {    
+          .addCase(getAllStudents.fulfilled, (state, action) => {    
             state.loading = false;     
-            state.sections = action.payload.sections;         
+            state.students = action.payload.sections;         
             state.error = null;
           })        
-          .addCase(getAllSection.rejected, (state, action) => {    
+          .addCase(getAllStudents.rejected, (state, action) => {    
             state.loading = false;    
             state.error = action.payload || "Erreur de connexion";
           })
 
-            .addCase(detailsSection.pending, (state) => {    
+            .addCase(detailsStudent.pending, (state) => {    
             state.loading = true;    
             state.error = null;
           })
       
-          .addCase(detailsSection.fulfilled, (state, action) => {    
+          .addCase(detailsStudent.fulfilled, (state, action) => {    
             state.loading = false;     
             state.section = action.payload;         
             state.error = null;
           })        
-          .addCase(detailsSection.rejected, (state, action) => {    
+          .addCase(detailsStudent.rejected, (state, action) => {    
             state.loading = false;    
             state.error = action.payload || "Erreur de connexion";
           })
@@ -133,4 +130,4 @@ export const getAllSection = createAsyncThunk("section/all", async(_, { rejectWi
 
   })
 
-  export default sectionSlice.reducer
+  export default studentSlice.reducer

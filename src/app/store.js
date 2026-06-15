@@ -7,6 +7,7 @@ import classroomReducer from "../features/classroom/classroomSlice"
 import feesReducer from "../features/fees/feesSlice"
 import yearReducer from "../features/year/yearSlice"
 import userReducer from "../features/user/userSlice"
+import studentReducer from "../features/student/studentSlice"
 
 const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ const store = configureStore({
     classroom: classroomReducer,
     fees: feesReducer,
     year: yearReducer,
-    user: userReducer
+    user: userReducer,
+    student: studentReducer
   },
 });
 
