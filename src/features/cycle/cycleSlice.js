@@ -36,7 +36,7 @@ export const addNewCycle = createAsyncThunk("cycle/add",  async ({ finalData, na
 export const getAllCycle = createAsyncThunk("cycle/all", async(_, { rejectWithValue }) => {
   
         try {
-            const response = await api.getAllCycle()
+            const response = await api.getAllCycles()
             return response.data
   
         } catch (error) {
@@ -57,7 +57,7 @@ export const getAllCycle = createAsyncThunk("cycle/all", async(_, { rejectWithVa
     "cycle/details",
     async (id, { rejectWithValue }) => {
       try {
-        const response = await api.updateTeacher(id, formValue);
+        const response = await api.getCycle(id, formValue);
         navigate(`/teacher`)
         return response.data;
       } catch (err) {

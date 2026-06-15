@@ -156,4 +156,19 @@ export const getAllStudets = () => API.get("/api/student/all");
 
 export const getStudents = (id) => API.get(`/api/student/${id}`);
 
+/* ================================================= */
+/* CYCLE */
+/* ================================================= */
+
+export const addNewClycle = (data) =>
+  API.post("/api/cycle/add", data);
+
+export const getAllCycles = () =>
+  API.get("/api/cycle/all");
+
+
+export const getCycle = (id) =>
+  API.get(`/api/cycle/${id}`);
+
+
 export default API;
