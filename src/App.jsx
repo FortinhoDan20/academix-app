@@ -134,61 +134,61 @@ useEffect(() => {
           <Route index element={<Dashboard />} />
 
           {/* USERS */}
-          <Route path="users" element={<Utilisateur />} />
-          <Route path="add-new-user" element={<AddUser />} />
+          <Route path="/users" element={<Utilisateur />} />
+          <Route path="/add-new-user" element={<AddUser />} />
           <Route path="/users/view/:id" element={<DetailsInfos />} />
-          <Route path="edit-user" element={<EditUser />} />
+          <Route path="/edit-user" element={<EditUser />} />
 
           {/* SCHOOL */}
-          <Route path="list-school" element={<School />} />
-          <Route path="add-new-school" element={<AddSchool />} />
-          <Route path="edit-school" element={<EditSchool />} />
-          <Route path="details-school" element={<DetailsSchool />} />
+          <Route path="/list-school" element={<School />} />
+          <Route path="/add-new-school" element={<AddSchool />} />
+          <Route path="/edit-school" element={<EditSchool />} />
+          <Route path="/details-school" element={<DetailsSchool />} />
 
           {/* CYCLE */}
-          <Route path="cycle-list" element={<Cycle />} />
-          <Route path="add-cycle" element={<AddCycle />} />
+          <Route path="/cycle-list" element={<Cycle />} />
+          <Route path="/add-cycle" element={<AddCycle />} />
 
           {/* SECTION */}
-          <Route path="section-list" element={<Section />} />
-          <Route path="add-section" element={<AddSection />} />
+          <Route path="/section-list" element={<Section />} />
+          <Route path="/add-section" element={<AddSection />} />
 
           {/* OPTION */}
-          <Route path="option-list" element={<Option />} />
-          <Route path="add-option" element={<AddOption />} />
+          <Route path="/option-list" element={<Option />} />
+          <Route path="/add-option" element={<AddOption />} />
 
           {/* CLASSROOM */}
-          <Route path="classroom-list" element={<Classrroom />} />
-          <Route path="add-classroom" element={<AddClassroom />} />
+          <Route path="/classroom-list" element={<Classrroom />} />
+          <Route path="/add-classroom" element={<AddClassroom />} />
 
           {/* FEES */}
           <Route path="/fees-list" element={<Fees />} />
           <Route path="/add-fees" element={<AddFees />} />
 
           {/* PAYMENT */}
-          <Route path="add-new-paid" element={<NewPaid />} />
-          <Route path="list-paid" element={<ListPaid />} />
-          <Route path="caisse" element={<Caisse />} />
-          <Route path="register-nofeepaid" element={<ListNoFeePaid />} />
+          <Route path="/add-new-paid" element={<NewPaid />} />
+          <Route path="l/ist-paid" element={<ListPaid />} />
+          <Route path="/caisse" element={<Caisse />} />
+          <Route path="/register-nofeepaid" element={<ListNoFeePaid />} />
            <Route path="/receipt-inscription/:id" element={<Receipt />} />
            <Route path="/verify-receipt/:id" element={<VerifyReceipt />} />
 
           {/* STUDENT */}
-          <Route path="add-new-student" element={<NewStudent />} />
-          <Route path="list-inscrit" element={<ListInscrit />} />
-          <Route path="details-student" element={<StudentDetails />} />
-          <Route path="profile-student" element={<Profile />} />
+          <Route path="/add-new-student" element={<NewStudent />} />
+          <Route path="/list-inscrit" element={<ListInscrit />} />
+          <Route path="/details-student" element={<StudentDetails />} />
+          <Route path="/profile-student" element={<Profile />} />
           <Route path="/student-dossier/:id" element={<StudentDossier />} />
           <Route path="/students" element={<Students />} />
 
           {/* RAPPORT */}
-          <Route path="rapport-global" element={<RapportGlobal />} />
-          <Route path="rapport-caisse" element={<RapportCaisse />} />
-          <Route path="rapport-entreprise" element={<RapportEntreprise />} />
+          <Route path="/rapport-global" element={<RapportGlobal />} />
+          <Route path="/rapport-caisse" element={<RapportCaisse />} />
+          <Route path="/rapport-entreprise" element={<RapportEntreprise />} />
 
           {/* STATISTIQUES */}
-          <Route path="statistique-global" element={<StatistiqueGlobal />} />
-          <Route path="statistique-academix" element={<StatistiqueEntreprise />} />
+          <Route path="/statistique-global" element={<StatistiqueGlobal />} />
+          <Route path="/statistique-academix" element={<StatistiqueEntreprise />} />
 
        
 

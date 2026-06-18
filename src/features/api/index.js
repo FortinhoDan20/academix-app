@@ -9,7 +9,8 @@ export const injectStore = (_store) => {
 };
 
 const API = axios.create({
-  baseURL: "http://localhost:5000",
+  //baseURL: "http://localhost:5000",
+  baseURL: "https://academix-api-2zw7.onrender.com"
 });
 
 /* ================================================= */
