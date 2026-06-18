@@ -6,6 +6,7 @@ export const addNewStudent = createAsyncThunk("student/add",  async ({finalData,
     
         try {
           
+          console.log('dans student slice:', finalData)
         
           const response = await api.addStudent(finalData);    
     
@@ -13,7 +14,7 @@ export const addNewStudent = createAsyncThunk("student/add",  async ({finalData,
             response.data.message
           );
         
-          navigate("/section-list");
+          navigate("/list-inscrit");
     
           /* ================= RETURN DATA ================= */
     

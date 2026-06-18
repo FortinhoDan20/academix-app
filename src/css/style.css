@@ -169,3 +169,24 @@
   focus:ring-2 focus:ring-sky-900 focus:border-sky-900
   shadow-sm;
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #receipt, #receipt * {
+    visibility: visible;
+  }
+
+  #receipt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

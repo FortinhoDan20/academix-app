@@ -8,6 +8,8 @@ import feesReducer from "../features/fees/feesSlice"
 import yearReducer from "../features/year/yearSlice"
 import userReducer from "../features/user/userSlice"
 import studentReducer from "../features/student/studentSlice"
+import registerReducer from "../features/register/registerSlice"
+import paymentReducer from "../features/payment/paymentSlice"
 
 const store = configureStore({
   reducer: {
@@ -19,7 +21,9 @@ const store = configureStore({
     fees: feesReducer,
     year: yearReducer,
     user: userReducer,
-    student: studentReducer
+    student: studentReducer,
+    register: registerReducer,
+    payment: paymentReducer
   },
 });
 

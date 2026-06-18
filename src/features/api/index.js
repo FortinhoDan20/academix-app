@@ -170,5 +170,36 @@ export const getAllCycles = () =>
 export const getCycle = (id) =>
   API.get(`/api/cycle/${id}`);
 
+/* ================================================= */
+/* REGISTER */
+/* ================================================= */
+
+export const addRegister = (data) =>
+  API.post("/api/register/add", data);
+
+export const allRegisters = () =>
+  API.get("/api/register/all");
+
+export const registersNoFeePaid = () =>
+  API.get("/api/register/all-no-feepaid");
+
+export const getRegister = (id) =>
+  API.get(`/api/register/${id}`); 
+
+
+/* ================================================= */
+/* REGISTER  PAID*/
+/* ================================================= */
+
+export const addRegisterPaid = (data) =>
+  API.post("/api/regiser-fee-paid/add", data)
+;
+
+export const allRegistersPaid = () =>
+  API.get("/api/regiser-fee-paid/all");
+
+export const getRegisterRecu = (id) =>
+  API.get(`/api/regiser-fee-paid/${id}`); 
+
 
 export default API;

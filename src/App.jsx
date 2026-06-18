@@ -71,6 +71,9 @@ import ProtectedRoute from "./pages/protected/ProtectedRoute";
 import { setUser } from "./features/auth/authSlice";
 import Profile from "./pages/student/profile";
 import Students from "./pages/student/Students";
+import ListNoFeePaid from "./pages/payment/ListNoFeePaid";
+import Receipt from "./pages/payment/Receipt";
+import VerifyReceipt from "./pages/payment/VerifyReceipt";
 
 function App() {
   const location = useLocation();
@@ -166,6 +169,9 @@ useEffect(() => {
           <Route path="add-new-paid" element={<NewPaid />} />
           <Route path="list-paid" element={<ListPaid />} />
           <Route path="caisse" element={<Caisse />} />
+          <Route path="register-nofeepaid" element={<ListNoFeePaid />} />
+           <Route path="/receipt-inscription/:id" element={<Receipt />} />
+           <Route path="/verify-receipt/:id" element={<VerifyReceipt />} />
 
           {/* STUDENT */}
           <Route path="add-new-student" element={<NewStudent />} />
@@ -184,7 +190,9 @@ useEffect(() => {
           <Route path="statistique-global" element={<StatistiqueGlobal />} />
           <Route path="statistique-academix" element={<StatistiqueEntreprise />} />
 
-          
+       
+
+         
 
         </Route>
 

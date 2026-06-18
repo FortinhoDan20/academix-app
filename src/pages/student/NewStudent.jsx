@@ -27,7 +27,6 @@ import { toast } from "react-toastify";
 /* ================= COMPONENT ================= */
 
 export default function NewStudent() {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -35,28 +34,15 @@ export default function NewStudent() {
 
   const { cycles = [] } = useSelector((state) => state.cycle);
 
-  const { sections = [] } = useSelector(
-    (state) => state.section
-  );
+  const { sections = [] } = useSelector((state) => state.section);
 
-  const { allYears = [] } = useSelector(
-    (state) => state.year
-  );
+  const { allYears = [] } = useSelector((state) => state.year);
 
-  const { options = [] } = useSelector(
-    (state) => state.option
-  );
+  const { options = [] } = useSelector((state) => state.option);
 
-  const { classrooms = [] } = useSelector(
-    (state) => state.classroom
-  );
+  const { classrooms = [] } = useSelector((state) => state.classroom);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-  } = useForm({
+  const { register, handleSubmit, reset, watch, trigger } = useForm({
     defaultValues: {
       cycleId: "",
       sectionId: "",
@@ -84,9 +70,7 @@ export default function NewStudent() {
   */
 
   const selectedCycleObj = useMemo(() => {
-    return cycles?.find(
-      (c) => c._id === selectedCycle
-    );
+    return cycles?.find((c) => c._id === selectedCycle);
   }, [cycles, selectedCycle]);
 
   /*
@@ -96,9 +80,7 @@ export default function NewStudent() {
   */
 
   const isHumanite =
-    selectedCycleObj?.name
-      ?.toLowerCase()
-      ?.trim() === "humanité";
+    selectedCycleObj?.name?.toLowerCase()?.trim() === "humanité";
 
   /*
   |--------------------------------------------------------------------------
@@ -107,14 +89,11 @@ export default function NewStudent() {
   */
 
   const filteredSections = useMemo(() => {
-
     if (!sections?.length) return [];
 
     return sections.filter(
-      (section) =>
-        section?.cycleId?._id === selectedCycle
+      (section) => section?.cycleId?._id === selectedCycle,
     );
-
   }, [sections, selectedCycle]);
 
   /*
@@ -124,14 +103,11 @@ export default function NewStudent() {
   */
 
   const filteredOptions = useMemo(() => {
-
     if (!options?.length) return [];
 
     return options.filter(
-      (option) =>
-        option?.sectionId?._id === selectedSection
+      (option) => option?.sectionId?._id === selectedSection,
     );
-
   }, [options, selectedSection]);
 
   /*
@@ -144,32 +120,22 @@ export default function NewStudent() {
   */
 
   const filteredClassrooms = useMemo(() => {
-
     if (!classrooms?.length) return [];
 
     // ================= HUMANITE =================
 
     if (isHumanite) {
-
       return classrooms.filter(
-        (classroom) =>
-          classroom?.optionId?._id === selectedOption
+        (classroom) => classroom?.optionId?._id === selectedOption,
       );
     }
 
     // ================= AUTRES CYCLES =================
 
     return classrooms.filter(
-      (classroom) =>
-        classroom?.cycleId?._id === selectedCycle
+      (classroom) => classroom?.cycleId?._id === selectedCycle,
     );
-
-  }, [
-    classrooms,
-    isHumanite,
-    selectedCycle,
-    selectedOption,
-  ]);
+  }, [classrooms, isHumanite, selectedCycle, selectedOption]);
 
   /*
   |--------------------------------------------------------------------------
@@ -181,6 +147,14 @@ export default function NewStudent() {
 
   const back = () => setStep((s) => s - 1);
 
+  const handleNext = async () => {
+    const valid = await trigger(); // valide les champs du step actuel
+
+    if (valid) {
+      setStep((s) => s + 1);
+    }
+  };
+
   /*
   |--------------------------------------------------------------------------
   | SUBMIT
@@ -188,13 +162,16 @@ export default function NewStudent() {
   */
 
   const onSubmit = (data) => {
+    if (step !== 3) return; // 🔥 bloque submit prématuré
+    console.log("FORM SUBMITTED");
     const finalData = {
-    ...data,
-    sectionId: data.sectionId || null,
-    optionId: data.optionId || null,
-  };
-    dispatch(dispatch(addNewStudent({ finalData, navigate, toast })))
-    
+      ...data,
+      sectionId: data.sectionId || null,
+      optionId: data.optionId || null,
+    };
+    console.log("data submit :", finalData);
+    dispatch(addNewStudent({ finalData, navigate, toast }))
+
     reset();
   };
 
@@ -205,7 +182,6 @@ export default function NewStudent() {
   */
 
   useEffect(() => {
-
     dispatch(getAllCycle());
 
     dispatch(getAllSection());
@@ -215,12 +191,10 @@ export default function NewStudent() {
     dispatch(getAllOptions());
 
     dispatch(getAllClassrooms());
-
   }, [dispatch]);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 p-4 md:p-6">
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -234,7 +208,6 @@ export default function NewStudent() {
           overflow-hidden
         "
       >
-
         {/* ================= HEADER ================= */}
 
         <div
@@ -248,11 +221,8 @@ export default function NewStudent() {
             text-white
           "
         >
-
           <div className="flex items-center justify-between">
-
             <div>
-
               <h1 className="text-2xl md:text-3xl font-bold">
                 Inscription élève
               </h1>
@@ -260,7 +230,6 @@ export default function NewStudent() {
               <p className="text-sky-100 mt-1 text-sm">
                 Gestion moderne des inscriptions scolaires
               </p>
-
             </div>
 
             <button
@@ -281,17 +250,13 @@ export default function NewStudent() {
               <ArrowLeft size={16} />
               Retour
             </button>
-
           </div>
-
         </div>
 
         {/* ================= STEPPER ================= */}
 
         <div className="px-6 md:px-8 pt-6">
-
           <div className="flex items-center gap-3">
-
             {[
               {
                 id: 1,
@@ -309,14 +274,11 @@ export default function NewStudent() {
                 icon: GraduationCap,
               },
             ].map((item, index) => {
-
               const Icon = item.icon;
 
               return (
                 <React.Fragment key={item.id}>
-
                   <div className="flex items-center gap-3">
-
                     <div
                       className={`
                         w-11
@@ -337,7 +299,6 @@ export default function NewStudent() {
                     </div>
 
                     <div className="hidden md:block">
-
                       <p
                         className={`
                           text-sm
@@ -351,13 +312,10 @@ export default function NewStudent() {
                       >
                         {item.label}
                       </p>
-
                     </div>
-
                   </div>
 
                   {index !== 2 && (
-
                     <div
                       className={`
                         flex-1
@@ -370,25 +328,17 @@ export default function NewStudent() {
                         }
                       `}
                     />
-
                   )}
-
                 </React.Fragment>
               );
             })}
-
           </div>
-
         </div>
 
         {/* ================= FORM ================= */}
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="p-6 md:p-8 space-y-8"
-        >
-
-         {/* ================= STEP 1 ================= */}
+        <form className="p-6 md:p-8 space-y-8">
+          {/* ================= STEP 1 ================= */}
 
           {step === 1 && (
             <motion.div
@@ -399,7 +349,6 @@ export default function NewStudent() {
               <SectionTitle title="Informations de l'élève" icon={User} />
 
               <div className="grid md:grid-cols-3 gap-5">
-
                 {/* NOM */}
                 <Field label="Nom">
                   <Input
@@ -455,25 +404,24 @@ export default function NewStudent() {
                 </Field>
               </div>
 
-            {/* ================= SEXE COMPACT UX ================= */}
-          <div className="space-y-2">
+              {/* ================= SEXE COMPACT UX ================= */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Sexe
+                </label>
 
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Sexe
-            </label>
+                <div className="flex gap-3">
+                  {/* GARÇON */}
+                  <label className="cursor-pointer">
+                    <input
+                      type="radio"
+                      value="M"
+                      {...register("sexe")}
+                      className="hidden peer"
+                    />
 
-            <div className="flex gap-3">
-
-              {/* GARÇON */}
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="M"
-                  {...register("sexe")}
-                  className="hidden peer"
-                />
-
-                <div className="
+                    <div
+                      className="
                   flex items-center gap-2
                   px-57 py-5 rounded-xl border
                   bg-white dark:bg-gray-800
@@ -483,22 +431,24 @@ export default function NewStudent() {
                   peer-checked:bg-sky-900
                   peer-checked:text-white
                   peer-checked:border-sky-900
-                ">
-                  <User size={26} />
-                  <span>Garçon</span>
-                </div>
-              </label>
+                "
+                    >
+                      <User size={26} />
+                      <span>Garçon</span>
+                    </div>
+                  </label>
 
-              {/* FILLE */}
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="F"
-                  {...register("sexe")}
-                  className="hidden peer"
-                />
+                  {/* FILLE */}
+                  <label className="cursor-pointer">
+                    <input
+                      type="radio"
+                      value="F"
+                      {...register("sexe")}
+                      className="hidden peer"
+                    />
 
-                <div className="
+                    <div
+                      className="
                   flex items-center gap-2
                   px-60 py-5 rounded-xl border
                   bg-white dark:bg-gray-800
@@ -508,96 +458,72 @@ export default function NewStudent() {
                   peer-checked:bg-pink-600
                   peer-checked:text-white
                   peer-checked:border-pink-600
-                ">
-                  <User size={26} />
-                  <span>Fille</span>
+                "
+                    >
+                      <User size={26} />
+                      <span>Fille</span>
+                    </div>
+                  </label>
                 </div>
-              </label>
-
-            </div>
-
-          </div>
-
+              </div>
             </motion.div>
           )}
 
           {/* ================= STEP 2 ================= */}
 
           {step === 2 && (
-
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="space-y-6"
             >
-
-              <SectionTitle
-                title="Informations des parents"
-                icon={Users}
-              />
+              <SectionTitle title="Informations des parents" icon={Users} />
 
               <div className="grid md:grid-cols-2 gap-5">
-
                 <Field label="Nom du père">
-
                   <Input
                     icon={User}
                     register={register("nomPere")}
                     placeholder="Nom complet du père"
                   />
-
                 </Field>
 
                 <Field label="Téléphone père">
-
                   <Input
                     icon={Phone}
                     register={register("telephonePere")}
                     placeholder="+243..."
                   />
-
                 </Field>
 
                 <Field label="Nom de la mère">
-
                   <Input
                     icon={User}
                     register={register("nomMere")}
                     placeholder="Nom complet de la mère"
                   />
-
                 </Field>
 
                 <Field label="Téléphone mère">
-
                   <Input
                     icon={Phone}
                     register={register("telephoneMere")}
                     placeholder="+243..."
                   />
-
                 </Field>
-
               </div>
-
             </motion.div>
-
           )}
 
           {/* ================= STEP 3 ================= */}
 
           {step === 3 && (
-
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="space-y-7"
             >
-
-              <SectionTitle
-                title="Informations scolaires"
-                icon={School}
-              />
+              <SectionTitle title="Informations scolaires" icon={School} />
 
               {/* ================= CYCLE ================= */}
 
@@ -611,23 +537,17 @@ export default function NewStudent() {
                   p-5
                 "
               >
-
                 <div className="flex items-center gap-2 mb-4">
-
                   <GraduationCap className="w-5 h-5 text-sky-700" />
 
                   <h3 className="font-semibold text-gray-800 dark:text-white">
                     Choisir le cycle
                   </h3>
-
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-
                   {cycles?.map((c) => (
-
                     <label key={c._id}>
-
                       <input
                         type="radio"
                         value={c._id}
@@ -654,77 +574,44 @@ export default function NewStudent() {
                           peer-checked:shadow-lg
                         "
                       >
-
-                        <p className="font-semibold text-sm">
-                          {c.name}
-                        </p>
-
+                        <p className="font-semibold text-sm">{c.name}</p>
                       </div>
-
                     </label>
-
                   ))}
-
                 </div>
-
               </div>
 
               {/* ================= YEAR + CLASS ================= */}
 
               <div className="grid md:grid-cols-2 gap-5">
-
-               <Field label="Année scolaire">
-                  <Select {...register("yearId")}   
-                    className="
-                      w-full
-                      p-2
-                      border
-                      rounded-md
-                      bg-white
-                      text-gray-900
-                      dark:bg-gray-800
-                      dark:text-white
-                    ">
+                <Field label="Année scolaire">
+                  <Select register={register("yearId")}>
                     <option value="">Choisir une année</option>
 
                     {allYears?.map((y) => (
-                      <option key={y._id} value={y._id} >
+                      <option key={y._id} value={y._id}>
                         {y.year}
                       </option>
                     ))}
                   </Select>
                 </Field>
-     
+
                 <Field label="Classe">
-
                   <Select register={register("classroomId")}>
-
-                    <option value="">
-                      Choisir une classe
-                    </option>
+                    <option value="">Choisir une classe</option>
 
                     {filteredClassrooms?.map((classroom) => (
-
-                      <option
-                        key={classroom._id}
-                        value={classroom._id}
-                        
-                      >
+                      <option key={classroom._id} value={classroom._id}>
                         {classroom.name}
                       </option>
-
                     ))}
-
                   </Select>
-
                 </Field>
-
               </div>
 
               {/* ================= HUMANITE ================= */}
 
               {isHumanite && (
-
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -739,9 +626,7 @@ export default function NewStudent() {
                     space-y-5
                   "
                 >
-
                   <div>
-
                     <h3 className="font-semibold text-blue-700 dark:text-blue-300">
                       Informations Humanité
                     </h3>
@@ -749,69 +634,40 @@ export default function NewStudent() {
                     <p className="text-sm text-blue-600/80 dark:text-blue-300/70 mt-1">
                       Sélectionnez la section puis l’option
                     </p>
-
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-5">
-
                     {/* ================= SECTION ================= */}
 
                     <Field label="Section">
-
                       <Select register={register("sectionId")}>
-
-                        <option value="">
-                          Choisir une section
-                        </option>
+                        <option value="">Choisir une section</option>
 
                         {filteredSections?.map((section) => (
-
-                          <option
-                            key={section._id}
-                            value={section._id}
-                          >
+                          <option key={section._id} value={section._id}>
                             {section.name}
                           </option>
-
                         ))}
-
                       </Select>
-
                     </Field>
 
                     {/* ================= OPTION ================= */}
 
                     <Field label="Option">
-
                       <Select register={register("optionId")}>
-
-                        <option value="">
-                          Choisir une option
-                        </option>
+                        <option value="">Choisir une option</option>
 
                         {filteredOptions?.map((option) => (
-
-                          <option
-                            key={option._id}
-                            value={option._id}
-                          >
+                          <option key={option._id} value={option._id}>
                             {option.name}
                           </option>
-
                         ))}
-
                       </Select>
-
                     </Field>
-
                   </div>
-
                 </motion.div>
-
               )}
-
             </motion.div>
-
           )}
 
           {/* ================= ACTIONS ================= */}
@@ -826,9 +682,7 @@ export default function NewStudent() {
               dark:border-gray-800
             "
           >
-
             {step > 1 ? (
-
               <button
                 type="button"
                 onClick={back}
@@ -845,16 +699,14 @@ export default function NewStudent() {
               >
                 Retour
               </button>
-
             ) : (
               <div />
             )}
 
             {step < 3 ? (
-
               <button
                 type="button"
-                onClick={next}
+                onClick={handleNext}
                 className="
                   flex
                   items-center
@@ -870,14 +722,12 @@ export default function NewStudent() {
                 "
               >
                 Suivant
-
                 <ArrowRight size={16} />
               </button>
-
             ) : (
-
               <button
-                type="submit"
+                type="button"
+                onClick={handleSubmit(onSubmit)}
                 className="
                   flex
                   items-center
@@ -895,15 +745,10 @@ export default function NewStudent() {
                 <Save size={16} />
                 Enregistrer
               </button>
-
             )}
-
           </div>
-
         </form>
-
       </motion.div>
-
     </div>
   );
 }
@@ -911,30 +756,19 @@ export default function NewStudent() {
 /* ================= FIELD ================= */
 
 const Field = ({ label, children }) => (
-
   <div className="space-y-2">
-
     <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
       {label}
     </label>
 
     {children}
-
   </div>
-
 );
 
 /* ================= INPUT ================= */
 
-const Input = ({
-  icon: Icon,
-  register,
-  type = "text",
-  placeholder,
-}) => (
-
+const Input = ({ icon: Icon, register, type = "text", placeholder }) => (
   <div className="relative">
-
     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
       <Icon size={18} />
     </div>
@@ -960,15 +794,12 @@ const Input = ({
         transition
       "
     />
-
   </div>
-
 );
 
 /* ================= SELECT ================= */
 
 const Select = ({ children, register }) => (
-
   <select
     {...register}
     className="
@@ -989,15 +820,12 @@ const Select = ({ children, register }) => (
   >
     {children}
   </select>
-
 );
 
 /* ================= SECTION TITLE ================= */
 
 const SectionTitle = ({ title, icon: Icon }) => (
-
   <div className="flex items-center gap-3">
-
     <div
       className="
         w-11
@@ -1014,7 +842,6 @@ const SectionTitle = ({ title, icon: Icon }) => (
     </div>
 
     <div>
-
       <h2 className="font-bold text-lg text-gray-800 dark:text-white">
         {title}
       </h2>
@@ -1022,9 +849,6 @@ const SectionTitle = ({ title, icon: Icon }) => (
       <p className="text-sm text-gray-500">
         Veuillez compléter les informations
       </p>
-
     </div>
-
   </div>
-
 );

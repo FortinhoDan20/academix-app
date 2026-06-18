@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Download,
@@ -10,6 +10,9 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getAllRegisters } from "../../features/register/registerSlice";
 
 /* ================= MOCK DATA ================= */
 const students = Array.from({ length: 60 }).map((_, i) => {
@@ -32,6 +35,9 @@ const students = Array.from({ length: 60 }).map((_, i) => {
 });
 
 export default function ListInscritERPWide() {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [filters, setFilters] = useState({
     search: "",
@@ -72,6 +78,10 @@ export default function ListInscritERPWide() {
     boys: students.filter(s => s.sex === "M").length,
     girls: students.filter(s => s.sex === "F").length,
   };
+
+  useEffect(() => {
+      dispatch(getAllRegisters());
+    }, [dispatch]);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 p-10">
