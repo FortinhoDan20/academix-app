@@ -27,7 +27,7 @@ const Receipt = () => {
   useEffect(() => {
     if (!detailsRecu?.paymentNumber) return;
 
-    const qrValue = `https://academix-api-2zw7.onrender.com/verify-receipt/${detailsRecu._id}`;
+    const qrValue = `https://academix-app-673b.onrender.com/verify-receipt/${detailsRecu._id}`;
 
     QRCode.toDataURL(qrValue)
       .then(setQrImage)
