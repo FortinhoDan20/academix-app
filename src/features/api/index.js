@@ -183,6 +183,30 @@ export const getAllClassrooms = () =>
   API.get("/api/classroom/all");
 
 
+/* ================================================= */
+/* OPTION */
+/* ================================================= */
+
+export const addNewOption = (data) =>
+  API.post("/api/option/add", data);
+
+export const getAllOptions = () =>
+  API.get("/api/option/all");
+
+
+/* ================================================= */
+/* SECTION */
+/* ================================================= */
+
+export const addSection = (data) =>
+  API.post("/api/section/add", data);
+
+export const getAllSections = () =>
+  API.get("/api/section/all");
+
+export const getSectionById = (id) =>
+  API.get(`/api/section/${id}`); 
+
 
 
 /* ================================================= */

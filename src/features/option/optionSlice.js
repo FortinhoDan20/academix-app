@@ -37,7 +37,7 @@ export const addNewOption = createAsyncThunk("option/add",  async ({ finalData, 
 export const getAllOptions = createAsyncThunk("option/all", async(_, { rejectWithValue }) => {
   
         try {
-            const response = await api.getAllOption()
+            const response = await api.getAllOptions()
 
             console.log("data options: ", response)
             return response.data
