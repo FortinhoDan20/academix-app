@@ -14,7 +14,7 @@ export const addNewStudent = createAsyncThunk("student/add",  async ({finalData,
             response.data.message
           );
         
-          navigate("/list-inscrit");
+          navigate("/register-nofeepaid");
     
           /* ================= RETURN DATA ================= */
     
