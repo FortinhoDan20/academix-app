@@ -105,6 +105,8 @@ export const addNewOption = (data) =>
 export const getAllOptions = () =>
   API.get("/api/option/all");
 
+export const getOptionById = (id) =>
+  API.get("/api/option/all");
 
 /* ================================================= */
 /* CLASSROOM */
