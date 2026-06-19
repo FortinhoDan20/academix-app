@@ -171,6 +171,20 @@ export const getAllCycles = () =>
 export const getCycle = (id) =>
   API.get(`/api/cycle/${id}`);
 
+
+/* ================================================= */
+/* CLASSROOM */
+/* ================================================= */
+
+export const addNewClassroom = (data) =>
+  API.post("/api/classroom/add", data);
+
+export const getAllClassrooms = () =>
+  API.get("/api/classroom/all");
+
+
+
+
 /* ================================================= */
 /* REGISTER */
 /* ================================================= */
