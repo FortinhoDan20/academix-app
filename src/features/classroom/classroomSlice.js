@@ -5,9 +5,7 @@ import * as api from "../api";
 export const addNewClassroom = createAsyncThunk("classroom/add",  async ({ finalData, navigate, toast }, { rejectWithValue }) => {
     
         try {
-          
-          console.log("slice data :", finalData)
-        
+                  
           const response = await api.addNewClassroom(finalData);    
     
           toast.success(
@@ -37,7 +35,7 @@ export const addNewClassroom = createAsyncThunk("classroom/add",  async ({ final
 export const getAllClassrooms = createAsyncThunk("classroom/all", async(_, { rejectWithValue }) => {
   
         try {
-            const response = await api.getAllClassroom()
+            const response = await api.getAllClassrooms()
             console.log("response :", response )
 
             return response.data
