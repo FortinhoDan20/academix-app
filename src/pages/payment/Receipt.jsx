@@ -186,6 +186,63 @@ const Receipt = () => {
     WinPrint.focus();
   };
 
+  const handlePrintA4 = () => {
+
+   const WinPrint = window.open("", "");
+
+   WinPrint.document.write(`
+
+   <html>
+
+   <head>
+
+   <style>
+
+      @page{
+         size:A4 portrait;
+         margin:15mm;
+      }
+
+      body{
+         font-family:Arial;
+         padding:20px;
+      }
+
+      .header{
+         text-align:center;
+      }
+
+      .title{
+         font-size:24px;
+         font-weight:bold;
+      }
+
+      table{
+         width:100%;
+         border-collapse:collapse;
+         margin-top:20px;
+      }
+
+      td{
+         padding:8px;
+         border:1px solid #ddd;
+      }
+
+   </style>
+
+   </head>
+
+   <body onload="window.print()">
+
+      ...
+
+   </body>
+
+   </html>
+
+   `);
+
+}
   // =========================
   // LOADING
   // =========================
@@ -279,6 +336,13 @@ const Receipt = () => {
         >
           🖨️ Imprimer
         </button>
+
+        <button
+        onClick={handlePrintA4}
+        className="bg-blue-700 text-white px-5 py-2 rounded-xl"
+    >
+        📄 Reçu A4
+    </button>
 
         <button
           onClick={() => navigate("/register-nofeepaid")}
