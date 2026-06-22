@@ -171,7 +171,7 @@ useEffect(() => {
           <Route path="/caisse" element={<Caisse />} />
           <Route path="/register-nofeepaid" element={<ListNoFeePaid />} />
            <Route path="/receipt-inscription/:id" element={<Receipt />} />
-           <Route path="/verify-receipt/:id" element={<VerifyReceipt />} />
+           
 
           {/* STUDENT */}
           <Route path="/add-new-student" element={<NewStudent />} />
@@ -198,6 +198,7 @@ useEffect(() => {
 
         {/* ================= REDIRECT ================= */}
         <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/verify-receipt/:id" element={<VerifyReceipt />} />
 
       </Routes>
     </>
