@@ -9,8 +9,8 @@ export const injectStore = (_store) => {
 };
 
 const API = axios.create({
-  //baseURL: "http://localhost:5000",
-  baseURL: "https://academix-api-2zw7.onrender.com"
+  baseURL: "http://localhost:5000",
+  //baseURL: "https://academix-api-2zw7.onrender.com"
 });
 
 /* ================================================= */
@@ -204,8 +204,8 @@ export const getRegister = (id) =>
 /* REGISTER  PAID*/
 /* ================================================= */
 
-export const addRegisterPaid = (data) =>
-  API.post("/api/regiser-fee-paid/add", data)
+export const addRegisterPaid = (FormData) => API.post("/api/regiser-fee-paid/add", FormData)
+
 ;
 
 export const allRegistersPaid = () =>

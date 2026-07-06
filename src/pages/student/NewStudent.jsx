@@ -42,6 +42,8 @@ export default function NewStudent() {
 
   const { classrooms = [] } = useSelector((state) => state.classroom);
 
+  const { loading } = useSelector((state) => state.student);
+
   const { register, handleSubmit, reset, watch, trigger } = useForm({
     defaultValues: {
       cycleId: "",
@@ -170,7 +172,7 @@ export default function NewStudent() {
       optionId: data.optionId || null,
     };
     console.log("data submit :", finalData);
-    dispatch(addNewStudent({ finalData, navigate, toast }))
+    dispatch(addNewStudent({ finalData, navigate, toast }));
 
     reset();
   };
@@ -728,22 +730,39 @@ export default function NewStudent() {
               <button
                 type="button"
                 onClick={handleSubmit(onSubmit)}
-                className="
+                disabled={loading}
+                className={`
                   flex
                   items-center
+                  justify-center
                   gap-2
-                  bg-green-600
-                  hover:bg-green-700
-                  text-white
                   px-6
                   py-3
                   rounded-xl
                   shadow-lg
                   transition
-                "
+                  min-w-[180px]
+
+                  ${
+                    loading
+                      ? "bg-green-400 cursor-not-allowed"
+                      : "bg-green-600 hover:bg-green-700"
+                  }
+
+                  text-white
+                `}
               >
-                <Save size={16} />
-                Enregistrer
+                {loading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Enregistrement...
+                  </>
+                ) : (
+                  <>
+                    <Save size={16} />
+                    Enregistrer
+                  </>
+                )}
               </button>
             )}
           </div>

@@ -38,6 +38,7 @@ export const getAllStudents = createAsyncThunk("student/all", async(_, { rejectW
   
         try {
             const response = await api.getAllStudets()
+
             return response.data
   
         } catch (error) {
@@ -104,7 +105,8 @@ export const getAllStudents = createAsyncThunk("student/all", async(_, { rejectW
       
           .addCase(getAllStudents.fulfilled, (state, action) => {    
             state.loading = false;     
-            state.students = action.payload.sections;         
+            state.students = action.payload
+                   
             state.error = null;
           })        
           .addCase(getAllStudents.rejected, (state, action) => {    

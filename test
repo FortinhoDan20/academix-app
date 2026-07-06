@@ -1,0 +1,51 @@
+ {paginated.map((s) => (
+                <tr
+                  key={s._id}
+                  className="border-b hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+                >
+                  <td className="p-4">
+                    <div>
+                      <p className="font-semibold">{s?.studentId?.nom}</p>
+                      <p className="font-semibold">{s?.studentId?.postnom}</p>
+
+                      <p className="text-sm text-gray-500">
+                        {s?.studentId?.prenom}
+                      </p>
+                    </div>
+                  </td>
+
+                  <td>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        s?.studentId?.sexe === "M"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-pink-100 text-pink-700"
+                      }`}
+                    >
+                      {s?.studentId?.sexe}
+                    </span>
+                  </td>
+
+                  <td>{s?.cycleId?.name}</td>
+                  <td>{s?.sectionId?.name || "-"}</td>
+                  <td>{s?.optionId?.name || "-"}</td>
+                  <td>{s?.classroomId?.name}</td>
+
+                  <td>
+                    <div className="flex gap-4 justify-center">
+                      <Eye
+                        size={18}
+                        className="text-blue-600 cursor-pointer hover:scale-110 transition"
+                      />
+                      <Edit
+                        size={18}
+                        className="text-yellow-600 cursor-pointer hover:scale-110 transition"
+                      />
+                      <Trash2
+                        size={18}
+                        className="text-red-600 cursor-pointer hover:scale-110 transition"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}

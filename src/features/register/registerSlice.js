@@ -61,8 +61,7 @@ export const allRegistersNofeePaid = createAsyncThunk("register/all-no-feepaid",
         try {
             const response = await api.registersNoFeePaid()
 
-            console.log("data slice :", response)
-
+           
             return response.data
 
   
@@ -79,6 +78,7 @@ export const allRegistersNofeePaid = createAsyncThunk("register/all-no-feepaid",
         }
   
 })
+
 
 
 

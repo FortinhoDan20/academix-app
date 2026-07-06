@@ -82,7 +82,6 @@ const Login = () => {
 
     if (!validate()) return;
 
-    console.log("data :", formValue)
 
     dispatch(
       signIn({

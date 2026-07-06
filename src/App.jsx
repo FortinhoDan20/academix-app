@@ -69,7 +69,7 @@ import StatistiqueEntreprise from "./pages/rapport/StatistiqueEntreprise";
 
 import ProtectedRoute from "./pages/protected/ProtectedRoute";
 import { setUser } from "./features/auth/authSlice";
-import Profile from "./pages/student/profile";
+import Profile from "./pages/student/ProfileStudent";
 import Students from "./pages/student/Students";
 import ListNoFeePaid from "./pages/payment/ListNoFeePaid";
 import Receipt from "./pages/payment/Receipt";
@@ -170,13 +170,13 @@ useEffect(() => {
           <Route path="l/ist-paid" element={<ListPaid />} />
           <Route path="/caisse" element={<Caisse />} />
           <Route path="/register-nofeepaid" element={<ListNoFeePaid />} />
-           <Route path="/receipt-inscription/:id" element={<Receipt />} />
+           <Route path="/receipt/:id" element={<Receipt />} />
            
 
           {/* STUDENT */}
           <Route path="/add-new-student" element={<NewStudent />} />
           <Route path="/list-inscrit" element={<ListInscrit />} />
-          <Route path="/details-student" element={<StudentDetails />} />
+          <Route path="/details-student/:id" element={<StudentDetails />} />
           <Route path="/profile-student" element={<Profile />} />
           <Route path="/student-dossier/:id" element={<StudentDossier />} />
           <Route path="/students" element={<Students />} />

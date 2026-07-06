@@ -186,63 +186,27 @@ const Receipt = () => {
     WinPrint.focus();
   };
 
-  const handlePrintA4 = () => {
 
-   const WinPrint = window.open("", "");
 
-   WinPrint.document.write(`
+const getMonthName = (month) => {
+  const months = [
+    "",
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre",
+  ];
 
-   <html>
-
-   <head>
-
-   <style>
-
-      @page{
-         size:A4 portrait;
-         margin:15mm;
-      }
-
-      body{
-         font-family:Arial;
-         padding:20px;
-      }
-
-      .header{
-         text-align:center;
-      }
-
-      .title{
-         font-size:24px;
-         font-weight:bold;
-      }
-
-      table{
-         width:100%;
-         border-collapse:collapse;
-         margin-top:20px;
-      }
-
-      td{
-         padding:8px;
-         border:1px solid #ddd;
-      }
-
-   </style>
-
-   </head>
-
-   <body onload="window.print()">
-
-      ...
-
-   </body>
-
-   </html>
-
-   `);
-
-}
+  return months[Number(month)] || "-";
+};
   // =========================
   // LOADING
   // =========================
@@ -307,13 +271,26 @@ const Receipt = () => {
 
         <div className="border-t border-dashed my-2"></div>
 
-        <div className="flex justify-between font-bold">
+ <div className="font-bold">PAIEMENT</div>
+        <div className="flex justify-between ">
           <span>Motif</span>
           <span>{detailsRecu?.typeFee}</span>
         </div>
+         <div className="flex justify-between ">
+          <span>Mois</span>
+          <span>{getMonthName(detailsRecu?.month)}</span>
+        </div>
+        <div className="flex justify-between ">
+          <span>Tranche payée</span>
+          <span>{getMonthName(detailsRecu?.month)}</span>
+        </div>
 
-        <div className="flex justify-between font-bold">
-          <span>Montant</span>
+        <div className="flex justify-between ">
+          <span>Montant payé</span>
+          <span>${detailsRecu?.amountPaid}</span>
+        </div>
+         <div className="flex justify-between ">
+          <span>reste à payer</span>
           <span>${detailsRecu?.amountPaid}</span>
         </div>
 
@@ -337,12 +314,6 @@ const Receipt = () => {
           🖨️ Imprimer
         </button>
 
-        <button
-        onClick={handlePrintA4}
-        className="bg-blue-700 text-white px-5 py-2 rounded-xl"
-    >
-        📄 Reçu A4
-    </button>
 
         <button
           onClick={() => navigate("/register-nofeepaid")}

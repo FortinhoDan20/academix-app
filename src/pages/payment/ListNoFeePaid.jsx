@@ -14,68 +14,7 @@ import { useSelector } from "react-redux";
 import { allRegistersNofeePaid } from "../../features/register/registerSlice";
 
 const ListNoFeePaid = () => {
-  const students = [
-    {
-      id: 1,
-      matricule: "25001",
-      nom: "VIHAMBA WENGESE",
-      prenom: "FORTINHO",
-      classe: "7ème A",
-      cycle: "Humanité",
-      annee: "2025-2026",
-      date: "15/06/2026",
-    },
-    {
-      id: 2,
-      matricule: "25002",
-      nom: "KABILA MUTOMBO",
-      prenom: "Grace",
-      classe: "5ème B",
-      cycle: "Secondaire",
-      annee: "2025-2026",
-      date: "15/06/2026",
-    },
-    {
-      id: 3,
-      matricule: "25003",
-      nom: "TSHIBOLA KALALA",
-      prenom: "David",
-      classe: "3ème A",
-      cycle: "Primaire",
-      annee: "2024-2025",
-      date: "14/06/2026",
-    },
-    {
-      id: 4,
-      matricule: "25004",
-      nom: "KASONGA",
-      prenom: "Patrick",
-      classe: "7ème A",
-      cycle: "Humanité",
-      annee: "2025-2026",
-      date: "12/06/2026",
-    },
-    {
-      id: 5,
-      matricule: "25005",
-      nom: "MUTOMBO",
-      prenom: "Sarah",
-      classe: "5ème B",
-      cycle: "Secondaire",
-      annee: "2024-2025",
-      date: "11/06/2026",
-    },
-    {
-      id: 6,
-      matricule: "25006",
-      nom: "MBUYI",
-      prenom: "Christian",
-      classe: "3ème A",
-      cycle: "Primaire",
-      annee: "2025-2026",
-      date: "10/06/2026",
-    },
-  ];
+
 
 const [search, setSearch] = useState("");
 const [selectedClass, setSelectedClass] = useState("");
@@ -85,6 +24,8 @@ const [openModal, setOpenModal] = useState(false);
 const [selectedStudent, setSelectedStudent] = useState(null);
 const { registers, loading, error } = useSelector((state) => state.register);
 const [currentPage, setCurrentPage] = useState(1);
+const today = new Date().toLocaleDateString("fr-FR");
+
   
 
 const dispatch = useDispatch();
@@ -183,12 +124,22 @@ const currentStudents = filteredStudents.slice(
   startIndex + itemsPerPage
 );
 
-const todayCount = filteredStudents.filter(
+const waitingCount = registers.length;
+
+const todayCount = registers.filter(
   (student) =>
-    moment(student?.createdAt).format("DD/MM/YYYY") ===
-    moment().format("DD/MM/YYYY")
+    moment(student.createdAt).format("YYYY-MM-DD") ===
+    moment().format("YYYY-MM-DD")
 ).length;
 
+const filteredCount = filteredStudents.length;
+
+const totalAmountExpected = filteredStudents.reduce(
+  (total, student) =>
+    total + Number(student?.fraisInscription || 0),
+  
+  0
+);
 
 
 useEffect(() => {
@@ -204,66 +155,158 @@ useEffect(() => {
       />
       {/* HEADER */}
 
-      <div className="bg-white rounded-3xl shadow-sm p-6 mb-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">
-              Frais d'inscription non payés
-            </h1>
+     <div className="bg-white rounded-3xl shadow-sm p-6 mb-6">
 
-            <p className="text-gray-500 text-sm mt-1">
-              Liste des élèves enregistrés mais non encore passés à la caisse
-            </p>
-          </div>
+  <div className="flex flex-col lg:flex-row justify-between items-center gap-5">
 
-          <div className="bg-red-100 text-red-700 px-4 py-2 rounded-xl font-semibold">
-            {filteredStudents.length} en attente
-          </div>
-        </div>
+    <div>
+
+      <h1 className="text-3xl font-bold text-gray-800">
+        Frais d'inscription non payés
+      </h1>
+
+      <p className="text-gray-500 mt-2">
+        Gestion des élèves enregistrés mais non encore passés à la caisse.
+      </p>
+
+    </div>
+
+    <div className="flex gap-3">
+
+      <div
+        className="
+          bg-red-100
+          text-red-700
+          px-5
+          py-3
+          rounded-2xl
+          font-bold
+          text-lg
+        "
+      >
+        {waitingCount} En attente
       </div>
+
+      <div
+        className="
+          bg-sky-100
+          text-sky-700
+          px-5
+          py-3
+          rounded-2xl
+          font-bold
+          text-lg
+        "
+      >
+        {todayCount} Aujourd'hui
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
 
       {/* STATS */}
 
-      <div className="grid md:grid-cols-3 gap-5 mb-6">
-        <div className="bg-white rounded-3xl p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">En attente</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
 
-              <h2 className="text-3xl font-bold text-red-600 mt-2">
-                {filteredStudents.length}
+        {/* En attente */}
+
+        <div
+          className="
+            bg-gradient-to-r
+            from-red-500
+            to-red-600
+            rounded-3xl
+            p-6
+            text-white
+            shadow-lg
+          "
+        >
+
+          <div className="flex justify-between items-center">
+
+            <div>
+
+              <p className="text-red-100 text-sm">
+                En attente de paiement
+              </p>
+
+              <h2 className="text-4xl font-bold mt-2">
+                {waitingCount}
               </h2>
+
             </div>
 
-            <AlertCircle size={40} className="text-red-500" />
+            <AlertCircle size={50} />
+
           </div>
+
         </div>
 
-        <div className="bg-white rounded-3xl p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Aujourd'hui</p>
+        {/* Aujourd'hui */}
 
-              <h2 className="text-3xl font-bold text-sky-700 mt-2">
-                {filteredStudents.filter((s) => s.date === "15/06/2026").length}
+        <div
+          className="
+            bg-gradient-to-r
+            from-sky-600
+            to-blue-700
+            rounded-3xl
+            p-6
+            text-white
+            shadow-lg
+          "
+        >
+
+          <div className="flex justify-between items-center">
+
+            <div>
+
+              <p className="text-blue-100 text-sm">
+                Inscriptions aujourd'hui
+              </p>
+
+              <h2 className="text-4xl font-bold mt-2">
+                {todayCount}
               </h2>
+
             </div>
 
-            <User size={40} className="text-sky-700" />
+            <User size={50} />
+
           </div>
+
         </div>
 
-        <div className="bg-white rounded-3xl p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-500 text-sm">Paiement attendu</p>
+        {/* Résultat filtre */}
 
-              <h2 className="text-3xl font-bold text-emerald-600 mt-2">100%</h2>
-            </div>
+       <div className="bg-white rounded-3xl p-5 shadow-sm">
+  <div className="flex items-center justify-between">
 
-            <CreditCard size={40} className="text-emerald-600" />
-          </div>
-        </div>
+    <div>
+
+      <p className="text-gray-500 text-sm">
+        Montant à encaisser
+      </p>
+
+      <h2 className="text-3xl font-bold text-emerald-600 mt-2">
+        {totalAmountExpected.toLocaleString("fr-FR")} $
+      </h2>
+
+      <p className="text-xs text-gray-400 mt-1">
+        Frais d'inscription en attente
+      </p>
+
+    </div>
+
+    <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center">
+      <CreditCard size={30} className="text-emerald-600" />
+    </div>
+
+  </div>
+</div>
+
       </div>
 
       {/* TABLE */}

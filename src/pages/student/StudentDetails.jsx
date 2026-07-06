@@ -1,7 +1,19 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Download, FileText } from "lucide-react";
+import {
+  ArrowLeft,
+  Download,
+  FileText,
+  User,
+  Phone,
+  GraduationCap,
+  School,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ProfileStudent from "./ProfileStudent";
+import StudentInfo from "./StudentInfo";
+import PaidStudentInfo from "./PaidStudentInfo";
+import FolderStudent from "./FolderStudent";
 
 /* ================= MOCK DATA ================= */
 const student = {
@@ -70,197 +82,62 @@ export default function StudentDetails() {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 p-6">
-
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1 }}
         className="max-w-7xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden"
       >
-
         {/* ================= HEADER ================= */}
-        <div className="p-6 border-b flex justify-between items-center bg-white dark:bg-gray-900">
+        <div className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-6 py-5">
+            {/* Titre */}
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Fiche élève
+              </h1>
 
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-              Fiche élève
-            </h1>
-            <p className="text-sm text-gray-500">
-              Détails complets du dossier scolaire
-            </p>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                Consultez les informations personnelles, les inscriptions et
+                l'historique des paiements de l'élève.
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate(-1)}
+                className="
+          inline-flex items-center gap-2
+          rounded-lg
+          border border-gray-300 dark:border-gray-600
+          bg-white dark:bg-gray-800
+          px-4 py-2.5
+          text-sm font-medium
+          text-gray-700 dark:text-gray-200
+          hover:bg-gray-100 dark:hover:bg-gray-700
+          transition-all duration-200
+        "
+              >
+                <ArrowLeft size={18} />
+                Retour
+              </button>
+            </div>
           </div>
-
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-gray-600 hover:text-blue-900 transition"
-          >
-            <ArrowLeft size={18} />
-            Retour
-          </button>
-
         </div>
 
         {/* ================= PROFILE ================= */}
-        <div className="p-6 grid md:grid-cols-4 gap-4">
-
-          <div className="bg-blue-900 text-white rounded-2xl p-5 shadow-md">
-            <p className="text-sm opacity-80">Nom complet</p>
-            <h2 className="text-xl font-bold">{student.name}</h2>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 border rounded-2xl p-5">
-            <p className="text-sm text-gray-500">Téléphone</p>
-            <p className="font-semibold">{student.phone}</p>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 border rounded-2xl p-5">
-            <p className="text-sm text-gray-500">Cycle actuel</p>
-            <p className="font-semibold">{student.cycle}</p>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 border rounded-2xl p-5">
-            <p className="text-sm text-gray-500">Classe</p>
-            <p className="font-semibold">{student.class}</p>
-          </div>
-
-        </div>
+        < ProfileStudent student={student}/>
 
         {/* ================= INSCRIPTIONS ================= */}
-        <div className="p-6">
-
-          <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-            📚 Historique des inscriptions
-          </h2>
-
-          <div className="overflow-x-auto rounded-xl border">
-
-            <table className="w-full text-sm">
-
-              <thead className="bg-blue-900 text-white">
-                <tr>
-                  <th className="p-3 text-left">Année</th>
-                  <th>Cycle</th>
-                  <th>Section</th>
-                  <th>Option</th>
-                  <th>Classe</th>
-                  <th>Statut</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {inscriptions.map((i, idx) => (
-                  <tr
-                    key={idx}
-                    className="border-b dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
-                  >
-                    <td className="p-3">{i.year}</td>
-                    <td>{i.cycle}</td>
-                    <td>{i.section}</td>
-                    <td>{i.option}</td>
-                    <td>{i.class}</td>
-                    <td>
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          i.status === "Active"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-gray-200 text-gray-600"
-                        }`}
-                      >
-                        {i.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-
-            </table>
-
-          </div>
-
-        </div>
+        <StudentInfo inscriptions={inscriptions}/>
 
         {/* ================= PAYMENTS ================= */}
-        <div className="p-6">
-
-          <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-            💰 Historique des paiements
-          </h2>
-
-          <div className="overflow-x-auto rounded-xl border">
-
-            <table className="w-full text-sm">
-
-              <thead className="bg-gray-900 text-white">
-                <tr>
-                  <th className="p-3 text-left">Date</th>
-                  <th>Type</th>
-                  <th>Montant</th>
-                  <th>Statut</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {payments.map((p, idx) => (
-                  <tr
-                    key={idx}
-                    className="border-b dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
-                  >
-                    <td className="p-3">{p.date}</td>
-                    <td>{p.type}</td>
-                    <td className="font-semibold">{p.amount} $</td>
-                    <td>
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          p.status === "Payé"
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-yellow-100 text-yellow-700"
-                        }`}
-                      >
-                        {p.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-
-            </table>
-
-          </div>
-
-        </div>
+       <PaidStudentInfo payments={payments}/>
 
         {/* ================= DOSSIER ================= */}
-        <div className="p-6">
 
-          <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-4">
-            📁 Dossier scolaire
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-4">
-
-            {documents.map((d, idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between p-4 rounded-xl border bg-gray-50 dark:bg-gray-800 hover:shadow-md transition"
-              >
-                <div className="flex items-center gap-2">
-                  <FileText size={18} className="text-blue-900" />
-                  <div>
-                    <p className="font-medium">{d.name}</p>
-                    <p className="text-xs text-gray-500">{d.type}</p>
-                  </div>
-                </div>
-
-                <Download
-                  size={18}
-                  className="text-blue-900 cursor-pointer hover:scale-110 transition"
-                />
-              </div>
-            ))}
-
-          </div>
-
-        </div>
-
+            <FolderStudent documents={documents} />
+       
       </motion.div>
     </div>
   );
