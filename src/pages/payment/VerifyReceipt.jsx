@@ -13,6 +13,8 @@ const VerifyReceipt = () => {
     (state) => state.payment
   );
 
+  console.log("details reçu :", detailsRecu)
+
   useEffect(() => {
     if (id) dispatch(getRegisterRecu(id));
   }, [dispatch, id]);
@@ -68,7 +70,7 @@ const VerifyReceipt = () => {
             {detailsRecu?.schoolId?.SchoolName}
           </h1>
           <p className="text-xs opacity-90">
-            Vérification officielle du reçu
+            Vérification officielles du reçu
           </p>
         </div>
 
