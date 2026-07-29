@@ -74,6 +74,7 @@ import Students from "./pages/student/Students";
 import ListNoFeePaid from "./pages/payment/ListNoFeePaid";
 import Receipt from "./pages/payment/Receipt";
 import VerifyReceipt from "./pages/payment/VerifyReceipt";
+import ListCurrentPaid from "./pages/payment/ListCurrentPaid";
 
 function App() {
   const location = useLocation();
@@ -167,10 +168,11 @@ useEffect(() => {
 
           {/* PAYMENT */}
           <Route path="/add-new-paid" element={<NewPaid />} />
-          <Route path="l/ist-paid" element={<ListPaid />} />
+          <Route path="/list-paid" element={<ListPaid />} />
+          <Route path="/list-current-paid" element={<ListCurrentPaid />} />
           <Route path="/caisse" element={<Caisse />} />
           <Route path="/register-nofeepaid" element={<ListNoFeePaid />} />
-           <Route path="/receipt/:id" element={<Receipt />} />
+          <Route path="/receipt/:id" element={<Receipt />} />
            
 
           {/* STUDENT */}

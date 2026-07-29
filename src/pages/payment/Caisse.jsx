@@ -14,138 +14,116 @@ import { useSelector } from "react-redux";
 import { getAllRegisters } from "../../features/register/registerSlice";
 
 const Caisse = () => {
+  const [search, setSearch] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedCycle, setSelectedCycle] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const { registers, loading, error } = useSelector((state) => state.register);
+  const [currentPage, setCurrentPage] = useState(1);
+  const today = new Date().toLocaleDateString("fr-FR");
 
+  const dispatch = useDispatch();
 
-const [search, setSearch] = useState("");
-const [selectedClass, setSelectedClass] = useState("");
-const [selectedYear, setSelectedYear] = useState("");
-const [selectedCycle, setSelectedCycle] = useState("");
-const [openModal, setOpenModal] = useState(false);
-const [selectedStudent, setSelectedStudent] = useState(null);
-const { registers, loading, error } = useSelector((state) => state.register);
-const [currentPage, setCurrentPage] = useState(1);
-const today = new Date().toLocaleDateString("fr-FR");
+  console.log("register :", registers)
+  const itemsPerPage = 5;
 
-  
-
-const dispatch = useDispatch();
-
-
-const itemsPerPage = 5;
-
-const classes = [
+  const classes = [
     ...new Set(
-      registers
-        ?.map((student) => student?.classroomId?.name)
-        .filter(Boolean)
+      registers?.map((student) => student?.classroomId?.name).filter(Boolean),
     ),
   ];
 
-const years = [
-  ...new Set(
-    registers
-      ?.map((student) => student?.yearId?.year)
-      .filter(Boolean)
-  ),
-];
+  const years = [
+    ...new Set(
+      registers?.map((student) => student?.yearId?.year).filter(Boolean),
+    ),
+  ];
 
-const cycles = [
-  ...new Set(
-    registers
-      ?.map((student) => student?.cycleId?.name)
-      .filter(Boolean)
-  ),
-];
+  const cycles = [
+    ...new Set(
+      registers?.map((student) => student?.cycleId?.name).filter(Boolean),
+    ),
+  ];
 
- 
-const filteredStudents = useMemo(() => {
-  return registers.filter((student) => {
-    const searchValue = search.toLowerCase();
+  const filteredStudents = useMemo(() => {
+    return registers.filter((student) => {
+      const searchValue = search.toLowerCase();
 
-    const matchSearch =
-      student?.studentId?.nom
-        ?.toLowerCase()
-        ?.includes(searchValue) ||
-      student?.studentId?.postnom
-        ?.toLowerCase()
-        ?.includes(searchValue) ||
-      student?.studentId?.prenom
-        ?.toLowerCase()
-        ?.includes(searchValue) ||
-      student?.studentId?.matricule
-        ?.toLowerCase()
-        ?.includes(searchValue);
+      const matchSearch =
+        student?.studentId?.nom?.toLowerCase()?.includes(searchValue) ||
+        student?.studentId?.postnom?.toLowerCase()?.includes(searchValue) ||
+        student?.studentId?.prenom?.toLowerCase()?.includes(searchValue) ||
+        student?.studentId?.matricule?.toLowerCase()?.includes(searchValue);
 
-    const matchClass =
-      !selectedClass ||
-      student?.classroomId?.name === selectedClass;
+      const matchClass =
+        !selectedClass || student?.classroomId?.name === selectedClass;
 
-    const matchYear =
-      !selectedYear ||
-      student?.yearId?.year === selectedYear;
+      const matchYear = !selectedYear || student?.yearId?.year === selectedYear;
 
-    const matchCycle =
-      !selectedCycle ||
-      student?.cycleId?.name === selectedCycle;
+      const matchCycle =
+        !selectedCycle || student?.cycleId?.name === selectedCycle;
 
-    return (
-      matchSearch &&
-      matchClass &&
-      matchYear &&
-      matchCycle
-    );
-  });
-}, [
-  registers,
-  search,
-  selectedClass,
-  selectedYear,
-  selectedCycle,
-]);
+      return matchSearch && matchClass && matchYear && matchCycle;
+    });
+  }, [registers, search, selectedClass, selectedYear, selectedCycle]);
 
-useEffect(() => {
-  setCurrentPage(1);
-}, [
-  search,
-  selectedClass,
-  selectedYear,
-  selectedCycle,
-]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, selectedClass, selectedYear, selectedCycle]);
 
-const totalPages = Math.ceil(
-  filteredStudents.length / itemsPerPage
-);
+  const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
 
-const startIndex =
-  (currentPage - 1) * itemsPerPage;
+  const startIndex = (currentPage - 1) * itemsPerPage;
 
-const currentStudents = filteredStudents.slice(
-  startIndex,
-  startIndex + itemsPerPage
-);
+  const currentStudents = filteredStudents.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
 
-const waitingCount = registers.length;
+  const waitingCount = registers.length;
 
-const todayCount = registers.filter(
-  (student) =>
-    moment(student.createdAt).format("YYYY-MM-DD") ===
-    moment().format("YYYY-MM-DD")
-).length;
+  const todayCount = registers.filter(
+    (student) =>
+      moment(student.createdAt).format("YYYY-MM-DD") ===
+      moment().format("YYYY-MM-DD"),
+  ).length;
 
-const filteredCount = filteredStudents.length;
+  const filteredCount = filteredStudents.length;
 
-const totalAmountExpected = filteredStudents.reduce(
-  (total, student) =>
-    total + Number(student?.reste || 0),
-  
-  0
-);
+  const totalAmountExpected = filteredStudents.reduce(
+    (total, student) => total + Number(student?.reste || 0),
 
+    0,
+  );
 
-useEffect(() => {
-      dispatch(getAllRegisters());
+const getPaymentStatus = (student) => {
+  switch (student?.paidStatus) {
+    case "SOLDÉ":
+      return {
+        label: "Soldé",
+        className: "bg-green-100 text-green-700 border border-green-200",
+      };
 
-    }, [dispatch]);
+    case "PAIEMENT_ENCOURS":
+      return {
+        label: "Paiement en cours",
+        className: "bg-orange-100 text-orange-700 border border-orange-200",
+      };
+
+    case "Aucun paiement":
+    default:
+      return {
+        label: "AUCUN_PAIEMENT",
+        className: "bg-red-100 text-red-700 border border-red-200",
+      };
+  }
+};
+
+  useEffect(() => {
+    dispatch(getAllRegisters());
+  }, [dispatch]);
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <PaymentModal
@@ -155,26 +133,21 @@ useEffect(() => {
       />
       {/* HEADER */}
 
-     <div className="bg-white rounded-3xl shadow-sm p-6 mb-6">
+      <div className="bg-white rounded-3xl shadow-sm p-6 mb-6">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-5">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Frais scolaire non payés
+            </h1>
 
-  <div className="flex flex-col lg:flex-row justify-between items-center gap-5">
+            <p className="text-gray-500 mt-2">
+              Gestion des élèves enregistrés mais non encore passés à la caisse.
+            </p>
+          </div>
 
-    <div>
-
-      <h1 className="text-3xl font-bold text-gray-800">
-        Frais scolaire non payés
-      </h1>
-
-      <p className="text-gray-500 mt-2">
-        Gestion des élèves enregistrés mais non encore passés à la caisse.
-      </p>
-
-    </div>
-
-    <div className="flex gap-3">
-
-      <div
-        className="
+          <div className="flex gap-3">
+            <div
+              className="
           bg-red-100
           text-red-700
           px-5
@@ -183,12 +156,12 @@ useEffect(() => {
           font-bold
           text-lg
         "
-      >
-        {waitingCount} En attente
-      </div>
+            >
+              {waitingCount} En attente
+            </div>
 
-      <div
-        className="
+            <div
+              className="
           bg-sky-100
           text-sky-700
           px-5
@@ -197,20 +170,16 @@ useEffect(() => {
           font-bold
           text-lg
         "
-      >
-        {todayCount} Aujourd'hui
+            >
+              {todayCount} Aujourd'hui
+            </div>
+          </div>
+        </div>
       </div>
-
-    </div>
-
-  </div>
-
-</div>
 
       {/* STATS */}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-
         {/* En attente */}
 
         <div
@@ -224,25 +193,15 @@ useEffect(() => {
             shadow-lg
           "
         >
-
           <div className="flex justify-between items-center">
-
             <div>
+              <p className="text-red-100 text-sm">En attente de paiement</p>
 
-              <p className="text-red-100 text-sm">
-                En attente de paiement
-              </p>
-
-              <h2 className="text-4xl font-bold mt-2">
-                {waitingCount}
-              </h2>
-
+              <h2 className="text-4xl font-bold mt-2">{waitingCount}</h2>
             </div>
 
             <AlertCircle size={50} />
-
           </div>
-
         </div>
 
         {/* Aujourd'hui */}
@@ -258,55 +217,38 @@ useEffect(() => {
             shadow-lg
           "
         >
-
           <div className="flex justify-between items-center">
-
             <div>
+              <p className="text-blue-100 text-sm">Paiement aujourd'hui</p>
 
-              <p className="text-blue-100 text-sm">
-                Paiement aujourd'hui
-              </p>
-
-              <h2 className="text-4xl font-bold mt-2">
-                {todayCount}
-              </h2>
-
+              <h2 className="text-4xl font-bold mt-2">{todayCount}</h2>
             </div>
 
             <User size={50} />
-
           </div>
-
         </div>
 
         {/* Résultat filtre */}
 
-       <div className="bg-white rounded-3xl p-5 shadow-sm">
-  <div className="flex items-center justify-between">
+        <div className="bg-white rounded-3xl p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-500 text-sm">Montant à encaisser</p>
 
-    <div>
+              <h2 className="text-3xl font-bold text-emerald-600 mt-2">
+                {totalAmountExpected.toLocaleString("fr-FR")} $
+              </h2>
 
-      <p className="text-gray-500 text-sm">
-        Montant à encaisser
-      </p>
+              <p className="text-xs text-gray-400 mt-1">
+                Frais d'inscription en attente
+              </p>
+            </div>
 
-      <h2 className="text-3xl font-bold text-emerald-600 mt-2">
-        {totalAmountExpected.toLocaleString("fr-FR")} $
-      </h2>
-
-      <p className="text-xs text-gray-400 mt-1">
-        Frais d'inscription en attente
-      </p>
-
-    </div>
-
-    <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center">
-      <CreditCard size={30} className="text-emerald-600" />
-    </div>
-
-  </div>
-</div>
-
+            <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center">
+              <CreditCard size={30} className="text-emerald-600" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* TABLE */}
@@ -315,7 +257,7 @@ useEffect(() => {
         {/* FILTRES */}
 
         <div className="p-5 border-b">
-         <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-4 gap-4">
             {/* Recherche */}
 
             <div className="relative">
@@ -342,7 +284,7 @@ useEffect(() => {
                 "
               />
             </div>
-            {/* cycle */ }
+            {/* cycle */}
             <select
               value={selectedCycle}
               onChange={(e) => setSelectedCycle(e.target.value)}
@@ -418,7 +360,7 @@ useEffect(() => {
 
                 <th className="text-left p-4">Date inscription</th>
 
-                <th className="text-center p-4">Statut</th>
+                <th className="text-center p-4">Statut de Paiement</th>
 
                 <th className="text-center p-4">Action</th>
               </tr>
@@ -432,9 +374,13 @@ useEffect(() => {
                   <td className="p-4">
                     <div>
                       <p className="font-semibold">{student?.studentId?.nom}</p>
-                      <p className="font-semibold">{student?.studentId?.postnom}</p>
+                      <p className="font-semibold">
+                        {student?.studentId?.postnom}
+                      </p>
 
-                      <p className="text-sm text-gray-500">{student?.studentId?.prenom}</p>
+                      <p className="text-sm text-gray-500">
+                        {student?.studentId?.prenom}
+                      </p>
                     </div>
                   </td>
 
@@ -444,25 +390,22 @@ useEffect(() => {
 
                   <td className="p-4">{student?.yearId?.year}</td>
 
-                  <td className="p-4">{moment(student?.createdAt).format("DD/MM/YYYY HH:mm")}</td>
+                  <td className="p-4">
+                    {moment(student?.createdAt).format("DD/MM/YYYY HH:mm")}
+                  </td>
 
                   <td className="text-center p-4">
-                    <span
-                      className="
-                        px-3 py-1
-                        rounded-full
-                        bg-red-100
-                        text-red-700
-                        text-xs
-                        font-semibold
-                      "
-                    >
-                     { student?.tuitionStatus === true
-                      ? "Paiement activé"
-                      : "Non payé"
-                     
-                     } 
-                    </span>
+                    {(() => {
+                      const status = getPaymentStatus(student);
+
+                      return (
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${status.className}`}
+                        >
+                          {status.label}
+                        </span>
+                      );
+                    })()}
                   </td>
 
                   <td className="text-center p-4">

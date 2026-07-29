@@ -214,5 +214,13 @@ export const allRegistersPaid = () =>
 export const getRegisterRecu = (id) =>
   API.get(`/api/regiser-fee-paid/${id}`); 
 
+/* ================================================= */
+/* PAYMENT*/
+/* ================================================= */
+
+export const AllCurrentPaid = () => API.get("/api/payment/current")
+
+export const AllPayments = () => API.get("/api/payment/all")
+
 
 export default API;

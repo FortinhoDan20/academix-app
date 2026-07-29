@@ -31,9 +31,9 @@ const AddFees = () => {
     defaultValues: {
       cycleId: "",
       yearId: "",
-      amount: "",
-      feeType: "",
-      otherMotif: "",
+      registerFee:"",
+      tuitionFee:""
+
     },
   });
 
@@ -42,8 +42,7 @@ const AddFees = () => {
 
   const onSubmit = (data) => {
         const finalData = {
-    ...data,
-    otherMotif: data.otherMotif || null,
+    ...data
   };
     dispatch(addNewFees({ finalData, navigate, toast }));
   };
@@ -190,72 +189,22 @@ const AddFees = () => {
                 <p className="text-red-500 text-xs mt-1">Année obligatoire</p>
               )}
             </div>
+            {/* ================= AMOUNT ================= */}
+            <input
+              type="number"
+              placeholder="Frais Inscription"
+              className="w-full p-3 border rounded-lg"
+              {...register("registerFee", { required: true })}
+            />
 
-            {/* ================= TYPE FRAIS (CLEAN CARDS) ================= */}
-            <div>
-              <label className="text-sm font-semibold text-gray-700 dark:text-white">
-                Type de frais
-              </label>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-2">
-                {[
-                  { value: "inscription", label: "Inscription" },
-                  { value: "scolaire", label: "Frais scolaire" },
-                  { value: "other", label: "Autre" },
-                ].map((t) => {
-                  const isActive = feeType === t.value;
-
-                  return (
-                    <label
-                      key={t.value}
-                      className={`
-                        cursor-pointer
-                        border
-                        rounded-lg
-                        p-3
-                        text-center
-                        text-sm
-                        transition
-
-                        ${
-                          isActive
-                            ? "bg-gray-100 dark:bg-gray-700 border-blue-500"
-                            : "border-gray-200 dark:border-gray-700"
-                        }
-                      `}
-                    >
-                      <input
-                        type="radio"
-                        value={t.value}
-                        {...register("feeType", { required: true })}
-                        className="hidden"
-                      />
-
-                      {t.label}
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* ================= MOTIF ================= */}
-            {feeType === "other" && (
-              <input
-                type="text"
-                placeholder="Motif"
-                className="w-full p-3 border rounded-lg"
-                {...register("otherMotif", {
-                  required: feeType === "other" ? "Motif obligatoire" : false,
-                })}
-              />
-            )}
+  
 
             {/* ================= AMOUNT ================= */}
             <input
               type="number"
-              placeholder="Montant"
+              placeholder="Frais scolaire"
               className="w-full p-3 border rounded-lg"
-              {...register("amount", { required: true })}
+              {...register("tuitionFee", { required: true })}
             />
 
             {/* ================= INFO SYSTEM FEE ================= */}

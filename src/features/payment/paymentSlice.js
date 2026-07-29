@@ -5,29 +5,23 @@ export const newRegisterPaid = createAsyncThunk(
   "payment/register/add",
   async ({ FormData, navigate, toast }, { rejectWithValue }) => {
     try {
-
-      
-      
       const response = await api.addRegisterPaid(FormData);
 
-      console.log("data slices :", response)
+      console.log("data slices :", response);
 
-    
-      const payment = response?.data?.payment?._id
+      const payment = response?.data?.payment?._id 
 
-      if(payment){
+      console.log("data payment :", payment)
 
+      if (payment) {
         toast.success(response.data.message);
-  
-      
-      navigate(`/receipt/${payment}`);
-      }
 
-  
+        navigate(`/receipt/${payment}`);
+      }
 
       /* ================= RETURN DATA ================= */
 
-     // return response.data; 
+      // return response.data;
     } catch (error) {
       const message =
         error.response?.data?.message || error.message || "Erreur serveur";
@@ -75,7 +69,46 @@ export const getRegisterRecu = createAsyncThunk(
   },
 );
 
-const registerSlice = createSlice({
+export const getAllCurrentPaid = createAsyncThunk(
+  "payment/current/all",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.AllCurrentPaid();
+      console.log("response :", response.data)
+
+      return response.data;
+    } catch (error) {
+      const message =
+        error.response?.data?.message || error.message || "Erreur serveur";
+
+      toast.error(message);
+
+      return rejectWithValue(message);
+    }
+  },
+);
+
+export const getAllPayment = createAsyncThunk(
+  "payment/all",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.AllPayments();
+
+      return response.data;
+    } catch (error) {
+      const message =
+        error.response?.data?.message || error.message || "Erreur serveur";
+
+      toast.error(message);
+
+      return rejectWithValue(message);
+    }
+  },
+);
+
+
+
+const paymentSlice = createSlice({
   name: "register",
 
   initialState: {
@@ -135,8 +168,23 @@ const registerSlice = createSlice({
       .addCase(getRegisterRecu.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Erreur de connexion";
-      });
+      })
+      .addCase(getAllCurrentPaid.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllCurrentPaid.fulfilled, (state, action) => {
+        state.loading = false;
+        state.paymentList = action.payload.data;
+        state.error = null;
+      })
+      .addCase(getAllCurrentPaid.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Erreur de connexion";
+      })
+
+
   },
 });
 
-export default registerSlice.reducer;
+export default paymentSlice.reducer;

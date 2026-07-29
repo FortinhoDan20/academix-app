@@ -447,7 +447,10 @@ const Fees = () => {
                 </th>
 
                 <th className="px-6 py-4 text-left">
-                  Type
+                  Frais Inscription
+                </th>
+                <th className="px-6 py-4 text-left">
+                  Frais Scolaire
                 </th>
 
                 <th className="px-6 py-4 text-right">
@@ -511,15 +514,22 @@ const Fees = () => {
                           text-blue-700
                         "
                       >
-                        {f.feeType}
+                        {f.registerTotal} $
                       </span>
 
                     </td>
 
+                    <td className="px-6 py-4 ">
+
+                      <span className="font-bold text-green-600 text-base">
+                        ${f.tuitionFee}
+                      </span>
+
+                    </td>
                     <td className="px-6 py-4 text-right">
 
                       <span className="font-bold text-green-600 text-base">
-                        ${f.total}
+                        ${f.registerTotal + f.tuitionFee}
                       </span>
 
                     </td>

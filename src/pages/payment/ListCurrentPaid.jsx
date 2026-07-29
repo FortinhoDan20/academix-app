@@ -25,7 +25,7 @@ const mockPayments = [
   },
 ];
 
-const ListPaid = () => {
+const ListCurrentPaid = () => {
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedCycle, setSelectedCycle] = useState("");
@@ -203,7 +203,7 @@ const ListPaid = () => {
         <div>
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
             <DollarSign className="text-sky-900" />
-            Le paiement global
+            Paiements scolaires encours 
           </h1>
           <p className="text-sm text-gray-500">
             Gestion complète des paiements élèves
@@ -573,7 +573,7 @@ const ListPaid = () => {
   );
 };
 
-export default ListPaid;
+export default ListCurrentPaid;
 
 /* ================= CARD ================= */
 const Card = ({ title, value }) => (
