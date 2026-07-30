@@ -26,7 +26,6 @@ const Caisse = () => {
 
   const dispatch = useDispatch();
 
-  console.log("register :", registers)
   const itemsPerPage = 5;
 
   const classes = [

@@ -5,13 +5,11 @@ export const newRegisterPaid = createAsyncThunk(
   "payment/register/add",
   async ({ FormData, navigate, toast }, { rejectWithValue }) => {
     try {
+      console.log(FormData)
+
       const response = await api.addRegisterPaid(FormData);
 
-      console.log("data slices :", response);
-
       const payment = response?.data?.payment?._id 
-
-      console.log("data payment :", payment)
 
       if (payment) {
         toast.success(response.data.message);
@@ -32,6 +30,15 @@ export const newRegisterPaid = createAsyncThunk(
     }
   },
 );
+
+export const newPaid = createAsyncThunk("payment/add-new-paid", async({ FormData, navigate, toast }, { rejectWithValue}) => {
+
+  try {
+    
+  } catch (error) {
+    
+  }
+})
 
 export const getAllRegisterPaid = createAsyncThunk(
   "payment/register/all",

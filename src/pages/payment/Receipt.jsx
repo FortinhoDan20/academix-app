@@ -14,6 +14,8 @@ const Receipt = () => {
 
   const { loading, detailsRecu } = useSelector((state) => state.payment);
 
+  console.log("details recu :", detailsRecu)
+
   // =========================
   // FETCH DATA
   // =========================
@@ -226,106 +228,192 @@ const getMonthName = (month) => {
   const option = detailsRecu?.registerId?.optionId?.name;
   const level = detailsRecu?.registerId?.cycleId?.name;
 
-  return (
-    <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
+ return (
+  <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
 
-      {/* PREVIEW */}
-      <div className="bg-white w-[320px] p-4 shadow-xl rounded-xl border text-[12px] font-mono">
+    {/* PREVIEW */}
+    <div className="bg-white w-[340px] p-5 shadow-2xl rounded-2xl border border-gray-200 text-[12px] font-mono">
 
-        <div className="text-center font-bold uppercase">
-          {detailsRecu?.schoolId?.SchoolName}
-        </div>
+      {/* HEADER */}
+      <div className="text-center mb-3">
+        <h1 className="font-bold text-sm uppercase text-gray-800">
+          {detailsRecu?.schoolId?.SchoolName || "Établissement"}
+        </h1>
 
-        <div className="text-center mb-2">
-          Reçu de caisse
-        </div>
+        <p className="text-gray-500 text-[11px]">
+          Reçu de caisse officiel
+        </p>
+      </div>
 
-        <div className="border-t border-dashed my-2"></div>
+      <div className="border-t border-dashed border-gray-400 my-2"></div>
+
+      {/* INFOS REÇU */}
+      <div className="space-y-1">
 
         <div className="flex justify-between">
-          <span>Reçu</span>
-          <span>{detailsRecu?.paymentNumber}</span>
+          <span className="text-gray-600">N° Reçu</span>
+          <span className="font-semibold text-gray-800">
+            {detailsRecu?.paymentNumber || "-"}
+          </span>
         </div>
 
         <div className="flex justify-between">
-          <span>Date</span>
-          <span>{moment(detailsRecu?.createdAt).format("DD/MM/YYYY HH:mm")}</span>
+          <span className="text-gray-600">Date</span>
+          <span className="text-gray-800">
+            {detailsRecu?.createdAt
+              ? moment(detailsRecu.createdAt).format("DD/MM/YYYY HH:mm")
+              : "-"}
+          </span>
         </div>
 
-        <div className="border-t border-dashed my-2"></div>
+      </div>
 
-        <div className="font-bold">ÉLÈVE</div>
+      <div className="border-t border-dashed border-gray-400 my-3"></div>
 
-        <div>
-          {detailsRecu?.registerId?.studentId?.nom}{" "}
-          {detailsRecu?.registerId?.studentId?.postnom}{" "}
+      {/* ÉLÈVE */}
+      <div className="mb-2">
+
+        <div className="font-bold text-gray-800 mb-1">ÉLÈVE</div>
+
+        <div className="font-semibold text-gray-900 uppercase">
+          {detailsRecu?.registerId?.studentId?.nom} {" "}
+          {detailsRecu?.registerId?.studentId?.postnom} {" "}
           {detailsRecu?.registerId?.studentId?.prenom}
         </div>
 
-        <div>Matricule: {detailsRecu?.registerId?.studentId?.matricule}</div>
-
-        <div>Niveau: {level || "-"}</div>
-        <div>Classe: {detailsRecu?.registerId?.classroomId?.name}</div>
-
-        {option && <div>Option: {option}</div>}
-
-        <div className="border-t border-dashed my-2"></div>
-
- <div className="font-bold">PAIEMENT</div>
-        <div className="flex justify-between ">
-          <span>Motif</span>
-          <span>{detailsRecu?.typeFee}</span>
-        </div>
-         <div className="flex justify-between ">
-          <span>Mois</span>
-          <span>{getMonthName(detailsRecu?.month)}</span>
-        </div>
-        <div className="flex justify-between ">
-          <span>Tranche payée</span>
-          <span>{getMonthName(detailsRecu?.month)}</span>
+        <div className="text-gray-700">
+          Matricule : {detailsRecu?.registerId?.studentId?.matricule || "-"}
         </div>
 
-        <div className="flex justify-between ">
-          <span>Montant payé</span>
-          <span>${detailsRecu?.amountPaid}</span>
-        </div>
-         <div className="flex justify-between ">
-          <span>reste à payer</span>
-          <span>${detailsRecu?.amountPaid}</span>
+        <div className="text-gray-700">
+          Niveau : {level || "-"}
         </div>
 
-        <div className="border-t border-dashed my-2"></div>
+        <div className="text-gray-700">
+          Classe : {detailsRecu?.registerId?.classroomId?.name || "-"}
+        </div>
 
-        {qrImage && (
-          <div className="flex justify-center">
-            <img src={qrImage} className="w-[120px]" />
+        {option && (
+          <div className="text-gray-700">
+            Option : {option}
           </div>
         )}
 
       </div>
 
-      {/* BUTTONS */}
-      <div className="flex gap-4 mt-6">
+      <div className="border-t border-dashed border-gray-400 my-3"></div>
 
-        <button
-          onClick={handlePrint}
-          className="bg-green-600 text-white px-6 py-2 rounded-xl"
-        >
-          🖨️ Imprimer
-        </button>
+      {/* PAIEMENT */}
+      <div className="mb-2">
 
+        <div className="font-bold text-gray-800 mb-1">PAIEMENT</div>
 
-        <button
-          onClick={() => navigate("/register-nofeepaid")}
-          className="bg-gray-600 text-white px-6 py-2 rounded-xl"
-        >
-          ↩️ Retour
-        </button>
+        <div className="flex justify-between py-0.5">
+          <span className="text-gray-600">Motif</span>
+          <span className="font-medium text-right max-w-[180px]">
+            {detailsRecu?.typeFee || "-"}
+          </span>
+        </div>
+
+        <div className="flex justify-between py-0.5">
+          <span className="text-gray-600">Mode</span>
+          <span className="font-medium">
+            {detailsRecu?.paymentMode?.toLowerCase() === "tranche"
+              ? "Par tranche"
+              : "Mensuel"}
+          </span>
+        </div>
+
+        {/* TRANCHE */}
+        {detailsRecu?.paymentMode?.toLowerCase() === "tranche" && (
+          <div className="flex justify-between py-0.5">
+            <span className="text-gray-600">Tranche payée</span>
+            <span className="font-medium">
+              {detailsRecu?.tranche || "-"}
+            </span>
+          </div>
+        )}
+
+        {/* MOIS */}
+        {["mois", "mensuel"].includes(
+          detailsRecu?.paymentMode?.toLowerCase()
+        ) && (
+          <div className="flex justify-between py-0.5">
+            <span className="text-gray-600">Mois</span>
+            <span className="font-medium">
+              {getMonthName(detailsRecu?.month)}
+            </span>
+          </div>
+        )}
+
+        <div className="flex justify-between py-1 mt-1 border-t border-gray-200">
+          <span className="font-semibold text-gray-800">Montant payé</span>
+          <span className="font-bold text-green-700">
+            ${Number(detailsRecu?.amountPaid || 0).toLocaleString("fr-FR")}
+          </span>
+        </div>
+
+        {detailsRecu?.typeFee === "frais scolaire" && (
+          <div className="flex justify-between py-1">
+            <span className="font-semibold text-gray-800">Reste à payer</span>
+            <span className="font-bold text-red-600">
+              ${Number(detailsRecu?.registerId?.reste || 0).toLocaleString("fr-FR")}
+            </span>
+          </div>
+        )}
 
       </div>
 
+      <div className="border-t border-dashed border-gray-400 my-3"></div>
+
+      {/* QR CODE */}
+      {qrImage && (
+        <div className="flex flex-col items-center gap-1">
+
+          <img
+            src={qrImage}
+            alt="QR Code"
+            className="w-[120px] h-[120px]"
+          />
+
+          <p className="text-[10px] text-gray-500 text-center">
+            Scanner pour vérifier l’authenticité du reçu
+          </p>
+
+        </div>
+      )}
+
+      <div className="border-t border-dashed border-gray-400 my-3"></div>
+
+      {/* FOOTER */}
+      <div className="text-center text-[10px] text-gray-500 leading-relaxed">
+        Merci pour votre paiement.<br />
+        Document généré automatiquement par <span className="font-semibold">ACADEMIX ERP SCHOOL</span>.
+      </div>
+
     </div>
-  );
+
+    {/* BUTTONS */}
+    <div className="flex gap-4 mt-6">
+
+      <button
+        onClick={handlePrint}
+        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-xl shadow-md transition-all duration-200"
+      >
+        🖨️ Imprimer
+      </button>
+
+      <button
+        onClick={() => navigate("/register-nofeepaid")}
+        className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-xl shadow-md transition-all duration-200"
+      >
+        ↩️ Retour
+      </button>
+
+    </div>
+
+  </div>
+);
 };
 
 export default Receipt;
