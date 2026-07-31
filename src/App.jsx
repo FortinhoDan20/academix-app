@@ -75,6 +75,7 @@ import ListNoFeePaid from "./pages/payment/ListNoFeePaid";
 import Receipt from "./pages/payment/Receipt";
 import VerifyReceipt from "./pages/payment/VerifyReceipt";
 import ListCurrentPaid from "./pages/payment/ListCurrentPaid";
+import PaymentReport from "./pages/rapportPDF/PaymentReport";
 
 function App() {
   const location = useLocation();
@@ -187,6 +188,8 @@ useEffect(() => {
           <Route path="/rapport-global" element={<RapportGlobal />} />
           <Route path="/rapport-caisse" element={<RapportCaisse />} />
           <Route path="/rapport-entreprise" element={<RapportEntreprise />} />
+          <Route path="/paiements/rapport" element={<PaymentReport />}/>
+          
 
           {/* STATISTIQUES */}
           <Route path="/statistique-global" element={<StatistiqueGlobal />} />
@@ -201,6 +204,7 @@ useEffect(() => {
         {/* ================= REDIRECT ================= */}
         <Route path="*" element={<Navigate to="/login" replace />} />
         <Route path="/verify-receipt/:id" element={<VerifyReceipt />} />
+        
 
       </Routes>
     </>
